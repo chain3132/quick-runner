@@ -181,6 +181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChunkSpawner
   chunkPrefabs:
   - {fileID: 1068940566647318664, guid: 7734ec9f5ceb34446a0e516640d7916e, type: 3}
+  specialPrefabs:
+  - {fileID: 1068940566647318664, guid: 45f2ff6228e9e784883e87d0c0a568ef, type: 3}
+  - {fileID: 1068940566647318664, guid: 45f2ff6228e9e784883e87d0c0a568ef, type: 3}
   poolSize: 6
   moveSpeed: 8
   factory: {fileID: 981145843}
@@ -276,8 +279,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleFactory
   blockPrefab: {fileID: 5650266528560600682, guid: 9c749cbccd524724cb27891154c4a2fc, type: 3}
   lowBlockPrefab: {fileID: 766148430792271711, guid: ed06d2d99905109419fa6947f02f7cba, type: 3}
+  breakWallPrefab: {fileID: 100064, guid: 952f886e9059daf49b863e4e7344fa41, type: 3}
+  longGapPrefab: {fileID: 0}
+  tunnelPrefab: {fileID: 5650266528560600682, guid: ede6993520448244e828f53b22a6dd4a, type: 3}
   difficulty: {fileID: 784584413}
   offsetY: 1
+  offsetYBreakWall: 2
+  chunkLength: 25
 --- !u!4 &981145844
 Transform:
   m_ObjectHideFlags: 0
@@ -403,7 +411,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -687,7 +695,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

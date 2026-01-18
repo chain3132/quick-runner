@@ -4,6 +4,8 @@ using UnityEngine;
 public class ChunkSpawner : MonoBehaviour
 {
     public List<GameObject> chunkPrefabs;
+    public List<GameObject> specialPrefabs;
+
     public int poolSize = 6;
     public float moveSpeed = 8f;
 
@@ -89,23 +91,51 @@ public class ChunkSpawner : MonoBehaviour
 
             // ถ้าเป็น special อื่น
             previousWasLongGap = false;
-
-            // สร้าง chunk ปกติ
-            var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
-            var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
-
-            var c = obj.GetComponent<Chunk>();
-            c.factory = factory;
-            c.difficulty = difficulty;
-
             if (special != null)
-                c.SetSpecial(special.Value);
-            else
-                c.SetNormal();
-
-            active.Enqueue(obj);
-            lastExit = obj.transform.Find("ExitPoint");
+            {
+                SpawnSpecialChunk(special.Value);
+            }
+            else{ SpawnNormalChunk(); }
+                
+            
         }
+    void SpawnSpecialChunk(SpecialType t)
+    {
+        GameObject prefab = null;
+
+        switch(t)
+        {
+            case SpecialType.BreakWall:
+                prefab = specialPrefabs[0];
+                break;
+            case SpecialType.ShrinkTunnel:
+                prefab = specialPrefabs[1];
+                break;
+        }
+
+        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+
+        var c = obj.GetComponent<Chunk>();
+        c.factory = factory;
+        c.difficulty = difficulty;
+        c.SetSpecial(t);
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
+    void SpawnNormalChunk()
+    {
+        var prefab = chunkPrefabs[0];
+        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+
+        var c = obj.GetComponent<Chunk>();
+        c.factory = factory;
+        c.difficulty = difficulty;
+        c.SetNormal();
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
     
     void MoveChunks()
     {

@@ -2,18 +2,25 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
+    public static CharacterManager Instance;
+
     public InputHandler input;
     public PlayerController p1;
     public PlayerController p2;
-
+    public int LaneP1 => laneP1;
+    public int LaneP2 => laneP2;
     public float[] laneX = new float[] { -2f, 0f, 2f };
-
+    
     private int laneP1 = 1;
     private int laneP2 = 1;
 
     private bool laneInputLockP1;
     private bool laneInputLockP2;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         p1.targetX = laneX[laneP1];
@@ -32,6 +39,7 @@ public class CharacterManager : MonoBehaviour
         HandleVerticalInput(p2, m2.y);
         ApplyOffsetLogic();
     }
+    
     void HandleVerticalInput(PlayerController p, float y)
     {
         if (y > 0.5f)
@@ -39,12 +47,22 @@ public class CharacterManager : MonoBehaviour
         if (y < -0.5f)
             p.Slide();
     }
+    
     void HandleLaneInput(ref int lane, ref bool locked, float x)
     {
         if (!locked)
         {
-            if (x > 0.5f) { lane = Mathf.Clamp(lane + 1, 0, laneX.Length - 1); locked = true; }
-            if (x < -0.5f) { lane = Mathf.Clamp(lane - 1, 0, laneX.Length - 1); locked = true; }
+            if (x > 0.5f)
+            {
+                lane = Mathf.Clamp(lane + 1, 0, laneX.Length - 1); locked = true;
+
+            }
+
+            if (x < -0.5f)
+            {
+                lane = Mathf.Clamp(lane - 1, 0, laneX.Length - 1); locked = true;
+
+            }
         }
         else
         {
