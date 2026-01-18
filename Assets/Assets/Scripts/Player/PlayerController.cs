@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
     {
         col.height = originalHeight * 0.5f;
         col.center = originalCenter * 0.5f;
+        Debug.Log("slide");
     }
 
     void RestoreCollider()

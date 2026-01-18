@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleFactory
   blockPrefab: {fileID: 5650266528560600682, guid: 9c749cbccd524724cb27891154c4a2fc, type: 3}
+  lowBlockPrefab: {fileID: 766148430792271711, guid: ed06d2d99905109419fa6947f02f7cba, type: 3}
   difficulty: {fileID: 784584413}
   offsetY: 1
 --- !u!4 &981145844
@@ -314,7 +315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7135790475038435720, guid: d4c0d7159c5a44b4c9e0b1bb6c221fe1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.18
+      value: -5.17
       objectReference: {fileID: 0}
     - target: {fileID: 7135790475038435720, guid: d4c0d7159c5a44b4c9e0b1bb6c221fe1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -497,7 +498,7 @@ Transform:
   m_GameObject: {fileID: 1222912649}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18695273, y: 0, z: 0, w: 0.98236895}
-  m_LocalPosition: {x: 0, y: 3.48, z: -10}
+  m_LocalPosition: {x: 0, y: 5.28, z: -4.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -580,9 +581,9 @@ MonoBehaviour:
   p1: {fileID: 1647171870}
   p2: {fileID: 1078530656}
   laneX:
-  - -3
+  - -4
   - 0
-  - 3
+  - 4
 --- !u!4 &1395152489
 Transform:
   m_ObjectHideFlags: 0
@@ -848,7 +849,7 @@ Transform:
   m_GameObject: {fileID: 1839443839}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 3.8899999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -908,7 +909,7 @@ Transform:
   m_GameObject: {fileID: 1870525350}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.07}
+  m_LocalPosition: {x: 0, y: 0, z: 5.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

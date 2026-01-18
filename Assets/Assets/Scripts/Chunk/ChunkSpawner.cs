@@ -11,6 +11,10 @@ public class ChunkSpawner : MonoBehaviour
     private Transform lastExit;
     public ObstacleFactory factory;
     public DifficultyController difficulty;
+    private int chunkCount = 0;
+    private bool previousWasLongGap = false;
+    private int longGapRemaining = 0;
+
 
     void Start()
     {
@@ -27,27 +31,82 @@ public class ChunkSpawner : MonoBehaviour
         MoveChunks();
         RecycleChunks();
     }
-
+    SpecialType RollSpecialTypeBalanced()
+    {
+        float r = Random.value;
+        if (r < 0.4f) return SpecialType.BreakWall;
+        else if (r < 0.8f) return SpecialType.ShrinkTunnel;
+        else return SpecialType.LongGap; // 20%
+    }
     void SpawnFirstChunk()
     {
         var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
         var obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
         obj.GetComponent<Chunk>().factory = factory;
         obj.GetComponent<Chunk>().difficulty = difficulty;
+        obj.GetComponent<Chunk>().isFirstChunk = true;
         active.Enqueue(obj);
         lastExit = obj.transform.Find("ExitPoint");
     }
 
     void SpawnNextChunk()
     {
-        var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
-        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
-        obj.GetComponent<Chunk>().factory = factory;
-        obj.GetComponent<Chunk>().difficulty = difficulty;
-        active.Enqueue(obj);
-        lastExit = obj.transform.Find("ExitPoint");
-    }
+            chunkCount++;
 
+            // ถ้ายังอยู่ในช่วง LongGap ก็ skip
+            if (longGapRemaining > 0)
+            {
+                longGapRemaining--;
+                AdvanceExit();
+                return;
+            }
+
+            bool spawnSpecial = false;
+
+            if (chunkCount > 3) // unlock หลัง 3 chunk
+            {
+                if (difficulty.ShouldSpawnSpecial())
+                {
+                    spawnSpecial = true;
+                    Debug.Log("Spawn Special Chunk");
+                }
+                    
+            }
+
+            SpecialType? special = null;
+
+            if (spawnSpecial)
+                special = RollSpecialTypeBalanced();
+
+            // ถ้า roll ได้ LongGap
+            if (special == SpecialType.LongGap && !previousWasLongGap)
+            {
+                previousWasLongGap = true;
+                longGapRemaining = Random.Range(1, 3); 
+                AdvanceExit();
+                return;
+            }
+
+            // ถ้าเป็น special อื่น
+            previousWasLongGap = false;
+
+            // สร้าง chunk ปกติ
+            var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
+            var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+
+            var c = obj.GetComponent<Chunk>();
+            c.factory = factory;
+            c.difficulty = difficulty;
+
+            if (special != null)
+                c.SetSpecial(special.Value);
+            else
+                c.SetNormal();
+
+            active.Enqueue(obj);
+            lastExit = obj.transform.Find("ExitPoint");
+        }
+    
     void MoveChunks()
     {
         foreach (var chunk in active)
@@ -68,4 +127,12 @@ public class ChunkSpawner : MonoBehaviour
             SpawnNextChunk();
         }
     }
+    void AdvanceExit()
+    {
+        float chunkLength = 20f; // ตาม prefab
+        lastExit.position += Vector3.forward * chunkLength;
+    }
+
+
+
 }
