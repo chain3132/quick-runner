@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -21,7 +22,18 @@ namespace EasyDestuctibleWall {
             cachedRigidbody = GetComponent<Rigidbody>();
         }
 
-        // When the chunk hits another object, take some of its health away
+        private void FixedUpdate()
+        {
+            if(health <= 0f) { 
+                foreach(Transform child in transform) { 
+                    Rigidbody spawnRB = child.gameObject.AddComponent<Rigidbody>(); child.parent = null; // Transfer velocity
+                    spawnRB.linearVelocity = GetComponent<Rigidbody>().GetPointVelocity(child.position); // Transfer torque
+                    spawnRB.AddTorque(GetComponent<Rigidbody>().angularVelocity, ForceMode.VelocityChange); 
+                } 
+                Destroy(gameObject); // Destroy this now empty chunk object
+            }        
+        }
+
         void OnCollisionEnter(Collision collision) {
             var pc = collision.collider.GetComponent<PlayerController>();
             if (pc == null)
@@ -33,18 +45,19 @@ namespace EasyDestuctibleWall {
 
             if (!sameLane)
             {
-                //pc.Die(); // หรือ GameManager.Fail();
+                GameManager.Instance.Fail();
                 Debug.Log("Player Die");
                 return;
             }
 
             // *** case ผ่านเงื่อนไข lane → ให้แตกตามระบบเดิม ***
-            float relativeVelocity = collision.relativeVelocity.sqrMagnitude;
 
             if (collision.rigidbody)
-                health -= relativeVelocity * impactMultiplier * collision.rigidbody.mass;
+            {
+                health -=  impactMultiplier * collision.rigidbody.mass;
+            }
             else
-                health -= relativeVelocity * impactMultiplier;
+                health -= impactMultiplier;
         }
     }
 }

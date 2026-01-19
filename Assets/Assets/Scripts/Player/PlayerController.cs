@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider col;
     private float originalHeight;
     private Vector3 originalCenter;
+    bool longJumping;
+    float airTime;
 
     void Start()
     {
@@ -38,14 +40,14 @@ public class PlayerController : MonoBehaviour
         
         verticalVelocity += gravity * Time.deltaTime;
         pos.y += verticalVelocity * Time.deltaTime;
-
+    
         // Ground
         if (pos.y <= trackHeight)
         {
             pos.y = trackHeight;
             verticalVelocity = 0f;
         }
-
+        
         // Slide timer
         if (isSliding)
         {
@@ -58,8 +60,24 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = pos;
-    }
+        if (longJumping)
+        {
+            verticalVelocity += gravity * 1.5f * Time.deltaTime;
 
+            if (IsGrounded())
+            {
+                longJumping = false;
+                CharacterManager.Instance.OnLongJumpLanded();
+            }
+        }
+
+        transform.position = pos;
+    }
+    public void ExecuteLongJump()
+    {
+        verticalVelocity = jumpForce * 1.8f; 
+        longJumping = true;
+    }
     public void Jump()
     {
         Debug.Log("Jump");

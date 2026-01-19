@@ -1,5 +1,12 @@
 using UnityEngine;
-
+public enum SyncJumpState
+{
+    None,
+    WaitingZoneTrigger,
+    WaitingBothPlayers,
+    WaitingJumpInput,
+    ExecutingLongJump
+}
 public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance;
@@ -16,7 +23,17 @@ public class CharacterManager : MonoBehaviour
 
     private bool laneInputLockP1;
     private bool laneInputLockP2;
+    SyncJumpState state = SyncJumpState.None;
 
+    
+    private bool p1Inside;
+    private bool p2Inside;
+    private bool p1Jumped;
+    private bool p2Jumped;
+    float jumpWindow = 1.2f; 
+    float jumpTimer;
+
+    
     private void Awake()
     {
         Instance = this;
@@ -26,7 +43,7 @@ public class CharacterManager : MonoBehaviour
         p1.targetX = laneX[laneP1];
         p2.targetX = laneX[laneP2];
     }
-
+    
     private void Update()
     {
         Vector2 m1 = input.P1Move;
@@ -38,6 +55,7 @@ public class CharacterManager : MonoBehaviour
         HandleVerticalInput(p1, m1.y);
         HandleVerticalInput(p2, m2.y);
         ApplyOffsetLogic();
+        TickSyncJump();
     }
     
     void HandleVerticalInput(PlayerController p, float y)
@@ -83,5 +101,84 @@ public class CharacterManager : MonoBehaviour
             p1.targetX = laneX[laneP1];
             p2.targetX = laneX[laneP2];
         }
+    }
+    public void SpawnedLongGap()
+    {
+        state = SyncJumpState.WaitingZoneTrigger;
+        ResetFlags();
+    }
+    public void OnEnterLongGapZone()
+    {
+        if (state == SyncJumpState.WaitingZoneTrigger)
+            state = SyncJumpState.WaitingBothPlayers;
+
+        if (!p1Inside && IsPlayerInside(p1)) p1Inside = true;
+        if (!p2Inside && IsPlayerInside(p2)) p2Inside = true;
+    }
+
+    public void OnExitLongGapZone()
+    {
+        if (state != SyncJumpState.ExecutingLongJump)
+            GameManager.Instance.Fail();
+    }
+    bool IsPlayerInside(PlayerController p)
+    {
+        return Vector3.Distance(p.transform.position, LongGapTrigger.Current.transform.position) < 5f;
+    }
+
+    void TickSyncJump()
+    {
+        switch (state)
+        {
+            
+            case SyncJumpState.WaitingBothPlayers:
+                if (p1Inside && p2Inside)
+                {
+                    if (laneP1 != laneP2)
+                    {
+                        GameManager.Instance.Fail();
+
+                        return;
+                    }
+                    state = SyncJumpState.WaitingJumpInput;
+                }
+                break;
+
+            case SyncJumpState.WaitingJumpInput:
+                jumpTimer -= Time.deltaTime;
+
+                if (p1Jumped && p2Jumped)
+                {
+                    state = SyncJumpState.ExecutingLongJump;
+                    ExecuteLongJump();
+                    break;
+                }
+
+                if (jumpTimer <= 0f)
+                {
+                    GameManager.Instance.Fail();
+                }
+                break;
+
+            case SyncJumpState.ExecutingLongJump:
+                // air lock, no lane switching
+                break;
+        }
+    }
+
+    void ExecuteLongJump()
+    {
+        p1.ExecuteLongJump();
+        p2.ExecuteLongJump();
+    }
+
+    void ResetFlags()
+    {
+        p1Inside = p2Inside = false;
+        p1Jumped = p2Jumped = false;
+    }
+    public void OnLongJumpLanded()
+    {
+        state = SyncJumpState.None;
     }
 }
