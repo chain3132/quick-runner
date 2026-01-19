@@ -14,6 +14,7 @@ public class CharacterManager : MonoBehaviour
     private bool laneInputLockP1;
     private bool laneInputLockP2;
 
+
     private void Start()
     {
         p1.targetX = laneX[laneP1];
@@ -35,9 +36,14 @@ public class CharacterManager : MonoBehaviour
     void HandleVerticalInput(PlayerController p, float y)
     {
         if (y > 0.5f)
+        {
             p.Jump();
+        }
+
         if (y < -0.5f)
+        {
             p.Slide();
+        }
     }
     void HandleLaneInput(ref int lane, ref bool locked, float x)
     {

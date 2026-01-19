@@ -18,9 +18,11 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider col;
     private float originalHeight;
     private Vector3 originalCenter;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();
         originalHeight = col.height;
         originalCenter = col.center;
@@ -64,7 +66,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Jump");
         if (IsGrounded() && !isSliding)
+        {
             verticalVelocity = jumpForce;
+            animator.SetTrigger("Jump");
+        }
     }
 
     public void Slide()
@@ -74,6 +79,7 @@ public class PlayerController : MonoBehaviour
             isSliding = true;
             slideTimer = slideDuration;
             ShrinkCollider();
+            animator.SetTrigger("Slide");
         }
     }
 
