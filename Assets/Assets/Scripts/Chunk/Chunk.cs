@@ -74,7 +74,6 @@
                     SpawnBreakWall();
                     break;
                 
-
                 case SpecialType.ShrinkTunnel:
                     SpawnShrinkTunnel();
                     break;
@@ -82,8 +81,7 @@
         }
         void SpawnBreakWall()
         {
-            for (int i = 0; i < 3; i++)
-                factory.SpawnBreakWall(lanePoints[i]);
+            factory.SpawnBreakWall(lanePoints[1]); 
         }
 
         void SpawnLongGap()
@@ -99,7 +97,6 @@
         void SpawnOneLane()
         {
             int lane = Random.Range(0, 3);
-
             var type = RollObstacleType();
             SpawnType(type, lanePoints[lane]);
         }

@@ -4,6 +4,9 @@ using UnityEngine;
 public class ChunkSpawner : MonoBehaviour
 {
     public List<GameObject> chunkPrefabs;
+    public List<GameObject> specialPrefabs;
+    public GameObject longGapPrefab;
+
     public int poolSize = 6;
     public float moveSpeed = 8f;
 
@@ -14,6 +17,8 @@ public class ChunkSpawner : MonoBehaviour
     private int chunkCount = 0;
     private bool previousWasLongGap = false;
     private int longGapRemaining = 0;
+    private bool lastWasSpecial = false;
+
 
 
     void Start()
@@ -33,10 +38,12 @@ public class ChunkSpawner : MonoBehaviour
     }
     SpecialType RollSpecialTypeBalanced()
     {
-        float r = Random.value;
-        if (r < 0.4f) return SpecialType.BreakWall;
-        else if (r < 0.8f) return SpecialType.ShrinkTunnel;
-        else return SpecialType.LongGap; // 20%
+        // float r = Random.value;
+        // if (r < 0.4f) return SpecialType.BreakWall;
+        // else if (r < 0.8f) return SpecialType.ShrinkTunnel;
+        // else return SpecialType.LongGap; // 20%
+        return SpecialType.ShrinkTunnel;
+
     }
     void SpawnFirstChunk()
     {
@@ -53,25 +60,22 @@ public class ChunkSpawner : MonoBehaviour
     {
             chunkCount++;
 
-            // ถ้ายังอยู่ในช่วง LongGap ก็ skip
-            if (longGapRemaining > 0)
+            if (previousWasLongGap)
             {
-                longGapRemaining--;
-                AdvanceExit();
+                previousWasLongGap = false;
+                SpawnNormalChunk();
+                lastWasSpecial = false;
                 return;
             }
 
             bool spawnSpecial = false;
 
-            if (chunkCount > 3) // unlock หลัง 3 chunk
+            if (!lastWasSpecial && chunkCount > 3 && difficulty.ShouldSpawnSpecial())
             {
-                if (difficulty.ShouldSpawnSpecial())
-                {
-                    spawnSpecial = true;
-                    Debug.Log("Spawn Special Chunk");
-                }
-                    
+                spawnSpecial = true;
+                Debug.Log("Spawning Special Chunk");
             }
+                
 
             SpecialType? special = null;
 
@@ -82,30 +86,75 @@ public class ChunkSpawner : MonoBehaviour
             if (special == SpecialType.LongGap && !previousWasLongGap)
             {
                 previousWasLongGap = true;
-                longGapRemaining = Random.Range(1, 3); 
-                AdvanceExit();
+                lastWasSpecial = true; 
+                SpawnLongGapChunk();
+                
                 return;
             }
 
             // ถ้าเป็น special อื่น
             previousWasLongGap = false;
-
-            // สร้าง chunk ปกติ
-            var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
-            var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
-
-            var c = obj.GetComponent<Chunk>();
-            c.factory = factory;
-            c.difficulty = difficulty;
-
             if (special != null)
-                c.SetSpecial(special.Value);
+            {
+                SpawnSpecialChunk(special.Value);
+                lastWasSpecial = true;
+            }
             else
-                c.SetNormal();
-
-            active.Enqueue(obj);
-            lastExit = obj.transform.Find("ExitPoint");
+            {
+                SpawnNormalChunk();
+                lastWasSpecial = false;
+            }
+                
+            
         }
+    void SpawnLongGapChunk()
+    {
+        var obj = Instantiate(longGapPrefab, lastExit.position, Quaternion.identity);
+
+        // บอก CharacterManager ว่ามี long gap spawn แล้ว
+        CharacterManager.Instance.SpawnedLongGap();
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
+    void SpawnSpecialChunk(SpecialType t)
+    {
+        GameObject prefab = null;
+
+        switch(t)
+        {
+            case SpecialType.BreakWall:
+                prefab = specialPrefabs[0];
+                break;
+            case SpecialType.ShrinkTunnel:
+                prefab = specialPrefabs[1];
+                CharacterManager.Instance.SpawnedSlideObstacle();
+                break;
+        }
+
+        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+
+        var c = obj.GetComponent<Chunk>();
+        c.factory = factory;
+        c.difficulty = difficulty;
+        c.SetSpecial(t);
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
+    void SpawnNormalChunk()
+    {
+        var prefab = chunkPrefabs[0];
+        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+
+        var c = obj.GetComponent<Chunk>();
+        c.factory = factory;
+        c.difficulty = difficulty;
+        c.SetNormal();
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
     
     void MoveChunks()
     {
@@ -129,7 +178,7 @@ public class ChunkSpawner : MonoBehaviour
     }
     void AdvanceExit()
     {
-        float chunkLength = 20f; // ตาม prefab
+        float chunkLength = 25f; // ตาม prefab
         lastExit.position += Vector3.forward * chunkLength;
     }
 

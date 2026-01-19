@@ -1,16 +1,22 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static GameManager Instance;
+    public GameObject failUI;
+    private void Awake()
     {
-        
+        Instance = this;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void Fail()
     {
-        
+        Time.timeScale = 0f;
+        failUI.SetActive(true);
+    }
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

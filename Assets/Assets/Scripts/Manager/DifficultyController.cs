@@ -22,12 +22,11 @@ public class DifficultyController : MonoBehaviour
     }
     public bool ShouldSpawnSpecial()
     {
-        Debug.Log("Difficulty: " + difficulty);
         if (difficulty < 2f) return false;
 
         float p = Mathf.Clamp01((difficulty - 2f) * 0.1f); 
         // ถ้า diff=2 => 0% / diff=4 => 20% / diff=6 => 40% 
-        Debug.Log("Special Spawn Probability: " + p);
+        //Debug.Log("Special Spawn Probability: " + p);
         return Random.value < p;
     }
 }
