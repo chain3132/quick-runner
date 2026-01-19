@@ -1213,6 +1213,7 @@ MonoBehaviour:
   - -4
   - 0
   - 4
+  state: 0
 --- !u!4 &1395152489
 Transform:
   m_ObjectHideFlags: 0
@@ -2223,5 +2224,5 @@ SceneRoots:
   - {fileID: 1659143862}
   - {fileID: 784584414}
   - {fileID: 981145844}
-  - {fileID: 1980658646}
   - {fileID: 413916490}
+  - {fileID: 1980658646}

@@ -45,8 +45,8 @@ namespace EasyDestuctibleWall {
 
             if (!sameLane)
             {
+                Debug.Log("DestructionManager: not same land → Game Over");
                 GameManager.Instance.Fail();
-                Debug.Log("Player Die");
                 return;
             }
 

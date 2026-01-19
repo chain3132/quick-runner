@@ -8,6 +8,7 @@ public class HitObstacle : MonoBehaviour
         Debug.Log("HitObstacle Collided with " + other.collider.name);
         if (other.collider.CompareTag("P1" ) || other.collider.CompareTag("P2"))
         {
+            Debug.Log("Player Hit Obstacle - Game Over " + this.name);
             GameManager.Instance.Fail();
         }
     }

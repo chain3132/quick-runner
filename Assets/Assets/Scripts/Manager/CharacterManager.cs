@@ -30,7 +30,7 @@ public class CharacterManager : MonoBehaviour
     private bool p2Inside;
     private bool p1Jumped;
     private bool p2Jumped;
-    float jumpTimer = 1.2f;
+    float jumpTimer = 2f;
 
     
     private void Awake()
@@ -60,7 +60,16 @@ public class CharacterManager : MonoBehaviour
     void HandleVerticalInput(PlayerController p, float y)
     {
         if (y > 0.5f)
+        {
             p.Jump();
+        
+            if (state == SyncJumpState.WaitingJumpInput)
+            {
+                if (p == p1) p1Jumped = true;
+                if (p == p2) p2Jumped = true;
+            }
+        }
+
         if (y < -0.5f)
             p.Slide();
     }
@@ -118,7 +127,11 @@ public class CharacterManager : MonoBehaviour
     public void OnExitLongGapZone()
     {
         if (state != SyncJumpState.ExecutingLongJump)
+        {
+            Debug.Log("Exited Long Gap Zone too early");
             GameManager.Instance.Fail();
+        }
+            
     }
     bool IsPlayerInside(PlayerController p)
     {
@@ -135,7 +148,7 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (laneP1 != laneP2)
                     {
-                       // GameManager.Instance.Fail();
+                       GameManager.Instance.Fail();
 
                         return;
                     }
@@ -145,9 +158,10 @@ public class CharacterManager : MonoBehaviour
 
             case SyncJumpState.WaitingJumpInput:
                 jumpTimer -= Time.deltaTime;
-
+                Debug.Log($"Waiting for both players to jump. Time left: {jumpTimer}");
                 if (p1Jumped && p2Jumped)
                 {
+                    Debug.Log("Both players jumped!");
                     state = SyncJumpState.ExecutingLongJump;
                     ExecuteLongJump();
                     break;
@@ -168,6 +182,7 @@ public class CharacterManager : MonoBehaviour
 
     void ExecuteLongJump()
     {
+        Debug.Log("Both players jumped the long gap!");
         p1.ExecuteLongJump();
         p2.ExecuteLongJump();
     }
