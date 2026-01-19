@@ -43,8 +43,8 @@ MonoBehaviour:
     y: 455
     width: 491
     height: 526
-  m_MinSize: {x: 50, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 52, y: 76}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -271,8 +271,8 @@ MonoBehaviour:
     y: 0
     width: 1062
     height: 558
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 226}
+  m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -324,8 +324,8 @@ MonoBehaviour:
     y: 0
     width: 491
     height: 399
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 43
+    y: 0
     width: 1920
     height: 36
   m_SerializedDataModeController:
@@ -700,7 +700,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79
+    y: 24
     width: 1061
     height: 532
   m_SerializedDataModeController:
@@ -1379,7 +1379,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.12149306, y: 0.5008549, z: -0.07124749, w: -0.85401446}
     speed: 2
-    m_Value: {x: -0.121491045, y: 0.5008466, z: -0.07124631, w: -0.85400033}
+    m_Value: {x: -0.12149306, y: 0.50085497, z: -0.07124749, w: -0.8540145}
   m_Size:
     m_Target: 10
     speed: 2
@@ -1438,8 +1438,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1062
-    y: 79
+    x: 1
+    y: 24
     width: 489
     height: 373
   m_SerializedDataModeController:
@@ -1479,8 +1479,8 @@ MonoBehaviour:
       - m_Data: 81816
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: EventSystem
-        m_OriginalName: EventSystem
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
@@ -1488,10 +1488,10 @@ MonoBehaviour:
           width: 0
           height: 0
         m_UserData:
-          m_Data: 67920
+          m_Data: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 13}
@@ -1523,8 +1523,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1062
-    y: 478
+    x: 1
+    y: 423
     width: 489
     height: 30
   m_SerializedDataModeController:
@@ -1573,31 +1573,30 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 44882
-    - m_Data: 46548
-    - m_Data: 46550
-    - m_Data: 46552
-    - m_Data: 46554
-    - m_Data: 46556
-    - m_Data: 46558
-    - m_Data: 46560
-    - m_Data: 46562
-    - m_Data: 46564
-    - m_Data: 46566
-    - m_Data: 46568
-    - m_Data: 46570
-    - m_Data: 46572
-    - m_Data: 46574
-    - m_Data: 46576
-    - m_Data: 46578
-    - m_Data: 46580
-    - m_Data: 46582
-    - m_Data: 46584
-    - m_Data: 46586
-    - m_Data: 46588
-    - m_Data: 46590
-    - m_Data: 46592
-    - m_Data: 46594
+    - m_Data: 47738
+    - m_Data: 47740
+    - m_Data: 47742
+    - m_Data: 47744
+    - m_Data: 47746
+    - m_Data: 47748
+    - m_Data: 47750
+    - m_Data: 47752
+    - m_Data: 47754
+    - m_Data: 47756
+    - m_Data: 47758
+    - m_Data: 47760
+    - m_Data: 47762
+    - m_Data: 47764
+    - m_Data: 47766
+    - m_Data: 47768
+    - m_Data: 47770
+    - m_Data: 47772
+    - m_Data: 47774
+    - m_Data: 47776
+    - m_Data: 47778
+    - m_Data: 47780
+    - m_Data: 47782
+    - m_Data: 47784
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1630,34 +1629,34 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 46548
-    - m_Data: 46550
-    - m_Data: 46552
-    - m_Data: 46554
-    - m_Data: 46556
-    - m_Data: 46558
-    - m_Data: 46560
-    - m_Data: 46562
-    - m_Data: 46564
-    - m_Data: 46566
-    - m_Data: 46568
-    - m_Data: 46570
-    - m_Data: 46572
-    - m_Data: 46576
-    - m_Data: 46578
-    - m_Data: 46582
-    - m_Data: 46584
-    - m_Data: 46588
-    - m_Data: 46592
-    - m_Data: 46594
-    - m_Data: 46960
-    - m_Data: 46972
-    - m_Data: 46976
-    - m_Data: 67796
+    - m_Data: 47738
+    - m_Data: 47740
+    - m_Data: 47742
+    - m_Data: 47744
+    - m_Data: 47746
+    - m_Data: 47748
+    - m_Data: 47750
+    - m_Data: 47752
+    - m_Data: 47754
+    - m_Data: 47756
+    - m_Data: 47758
+    - m_Data: 47760
+    - m_Data: 47762
+    - m_Data: 47764
+    - m_Data: 47766
+    - m_Data: 47768
+    - m_Data: 47770
+    - m_Data: 47772
+    - m_Data: 47774
+    - m_Data: 47776
+    - m_Data: 47778
+    - m_Data: 47780
+    - m_Data: 47782
+    - m_Data: 47784
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: mixamo.com
-      m_OriginalName: mixamo.com
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
@@ -1665,10 +1664,10 @@ MonoBehaviour:
         width: 0
         height: 0
       m_UserData:
-        m_Data: -22062
+        m_Data: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 3}
@@ -1734,8 +1733,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1062
-    y: 534
+    x: 1
+    y: 479
     width: 489
     height: 500
   m_SerializedDataModeController:
@@ -1772,8 +1771,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1553
-    y: 79
+    x: 1554
+    y: 24
     width: 366
     height: 955
   m_SerializedDataModeController:
@@ -1824,7 +1823,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 637
+    y: 582
     width: 1061
     height: 397
   m_SerializedDataModeController:

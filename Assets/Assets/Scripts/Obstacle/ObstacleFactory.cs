@@ -12,6 +12,7 @@ public class ObstacleFactory : MonoBehaviour
     public int offsetYBreakWall = 2;
     public float chunkLength = 25f;
     public float offsetYLowBlock =2;
+    public float offsetYTunnelWall = 0.5f;
     public GameObject SpawnBlock(Transform laneParent)
     {
         float zOffset = Random.Range(2f, chunkLength - 2f); // กันไม่ให้ชิดหัว-ท้ายเกินไป
@@ -43,7 +44,7 @@ public class ObstacleFactory : MonoBehaviour
 
     public GameObject SpawnTunnel(Transform laneParent)
     {
-        GameObject obj = Instantiate(tunnelPrefab, laneParent.position, Quaternion.identity);
+        GameObject obj = Instantiate(tunnelPrefab, laneParent.position + new Vector3(0,offsetYTunnelWall,chunkLength / 2), tunnelPrefab.transform.rotation);
         obj.transform.SetParent(laneParent);  
         return obj;
     }

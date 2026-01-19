@@ -7,6 +7,14 @@ public enum SyncJumpState
     WaitingJumpInput,
     ExecutingLongJump
 }
+public enum SyncSlideState
+{
+    None,
+    WaitingZoneTrigger,
+    WaitingBothPlayers,
+    WaitingSlideInput,
+    ExecutingSlide
+}
 public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance;
@@ -14,6 +22,7 @@ public class CharacterManager : MonoBehaviour
     public InputHandler input;
     public PlayerController p1;
     public PlayerController p2;
+    public GameObject Ball;
     public int LaneP1 => laneP1;
     public int LaneP2 => laneP2;
     public float[] laneX = new float[] { -2f, 0f, 2f };
@@ -24,12 +33,15 @@ public class CharacterManager : MonoBehaviour
     private bool laneInputLockP1;
     private bool laneInputLockP2;
     public SyncJumpState state = SyncJumpState.None;
+    public SyncSlideState slideState = SyncSlideState.None;
 
     
     private bool p1Inside;
     private bool p2Inside;
     private bool p1Jumped;
     private bool p2Jumped;
+    private bool p1Slided;
+    private bool p2Slided;
     float jumpTimer = 2f;
 
     
@@ -55,6 +67,7 @@ public class CharacterManager : MonoBehaviour
         HandleVerticalInput(p2, m2.y);
         ApplyOffsetLogic();
         TickSyncJump();
+        TickSyncSlide();
     }
     
     void HandleVerticalInput(PlayerController p, float y)
@@ -71,7 +84,16 @@ public class CharacterManager : MonoBehaviour
         }
 
         if (y < -0.5f)
+        {
             p.Slide();
+        
+            if (slideState == SyncSlideState.WaitingSlideInput)
+            {
+                if (p == p1) p1Slided = true;
+                if (p == p2) p2Slided = true;
+            }
+        }
+          
     }
     
     void HandleLaneInput(ref int lane, ref bool locked, float x)
@@ -115,6 +137,28 @@ public class CharacterManager : MonoBehaviour
         state = SyncJumpState.WaitingZoneTrigger;
         ResetFlags();
     }
+    public void SpawnedSlideObstacle()
+    {
+        slideState = SyncSlideState.WaitingZoneTrigger;
+        ResetFlags();
+    }
+    public void OnEnterSlideZone()
+    {
+        if (slideState == SyncSlideState.WaitingZoneTrigger)
+            slideState = SyncSlideState.WaitingBothPlayers;
+
+        if (!p1Inside ) p1Inside = true;
+        if (!p2Inside ) p2Inside = true;
+    }
+    public void OnExitTunnelZone()
+    {
+        if (slideState != SyncSlideState.ExecutingSlide)
+        {
+            Debug.Log("Exited Slide Zone too early");
+            GameManager.Instance.Fail();
+        }
+            
+    }
     public void OnEnterLongGapZone()
     {
         if (state == SyncJumpState.WaitingZoneTrigger)
@@ -132,6 +176,11 @@ public class CharacterManager : MonoBehaviour
             GameManager.Instance.Fail();
         }
             
+    }
+    bool IsPlayerInsideSlideZone(PlayerController p)
+    {
+        Debug.Log(Vector3.Distance(p.transform.position, EnterTunnelTrigger.Current.transform.position) < 5f);
+        return Vector3.Distance(p.transform.position, EnterTunnelTrigger.Current.transform.position) < 5f;
     }
     bool IsPlayerInside(PlayerController p)
     {
@@ -179,21 +228,74 @@ public class CharacterManager : MonoBehaviour
                 break;
         }
     }
+    void TickSyncSlide()
+    {
+        switch (slideState)
+        {
+            case SyncSlideState.WaitingBothPlayers:
+                if (p1Inside && p2Inside)
+                {
+                    if (laneP1 != laneP2)
+                    {
+                        GameManager.Instance.Fail();
 
+                        return;
+                    }
+                    slideState = SyncSlideState.WaitingSlideInput;
+                }
+                break;
+
+            case SyncSlideState.WaitingSlideInput:
+                if (p1Slided && p2Slided)
+                {
+                    Debug.Log("Both players slid!");
+                    slideState = SyncSlideState.ExecutingSlide;
+                    ExecuteSlide();
+                    break;
+                }
+                break;
+
+            case SyncSlideState.ExecutingSlide:
+                // air lock, no lane switching
+                break;
+        }
+    }
     void ExecuteLongJump()
     {
         Debug.Log("Both players jumped the long gap!");
         p1.ExecuteLongJump();
         p2.ExecuteLongJump();
     }
-
+    
+    void ExecuteSlide()
+    {
+        p1.gameObject.SetActive(false);
+        p2.gameObject.SetActive(false);
+        Ball.SetActive(true);
+        
+    }
     void ResetFlags()
     {
         p1Inside = p2Inside = false;
         p1Jumped = p2Jumped = false;
+        p1Slided = p2Slided = false;
+        
+        
     }
     public void OnLongJumpLanded()
     {
         state = SyncJumpState.None;
+    }
+    public void OnSlideExecuted()
+    {
+        slideState = SyncSlideState.None;
+        p1.gameObject.SetActive(true);
+        p2.gameObject.SetActive(true);
+        Ball.SetActive(false);
+    }
+    public void OnFailedSlide()
+    {
+        Debug.Log("Failed to slide in time");
+        GameManager.Instance.Fail();
     }
 }
