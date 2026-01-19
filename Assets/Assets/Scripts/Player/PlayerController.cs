@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     }
     public void ExecuteLongJump()
     {
+        
         verticalVelocity = jumpForce * 1.8f; 
         longJumping = true;
     }

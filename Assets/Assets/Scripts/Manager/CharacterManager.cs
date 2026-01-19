@@ -23,15 +23,14 @@ public class CharacterManager : MonoBehaviour
 
     private bool laneInputLockP1;
     private bool laneInputLockP2;
-    SyncJumpState state = SyncJumpState.None;
+    public SyncJumpState state = SyncJumpState.None;
 
     
     private bool p1Inside;
     private bool p2Inside;
     private bool p1Jumped;
     private bool p2Jumped;
-    float jumpWindow = 1.2f; 
-    float jumpTimer;
+    float jumpTimer = 1.2f;
 
     
     private void Awake()
@@ -136,7 +135,7 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (laneP1 != laneP2)
                     {
-                        GameManager.Instance.Fail();
+                       // GameManager.Instance.Fail();
 
                         return;
                     }
@@ -156,6 +155,7 @@ public class CharacterManager : MonoBehaviour
 
                 if (jumpTimer <= 0f)
                 {
+                    Debug.Log("Failed to jump in time");
                     GameManager.Instance.Fail();
                 }
                 break;
