@@ -21,9 +21,13 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     bool longJumping;
     float airTime;
+    private Rigidbody rb;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         animator = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();
         originalHeight = col.height;
@@ -36,9 +40,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        Vector3 pos = transform.position;
+        Vector3 pos = rb.position;;
         pos.x = Mathf.Lerp(pos.x, targetX, lerpSpeed * Time.deltaTime);
-        transform.position = pos;
         
         verticalVelocity += gravity * Time.deltaTime;
         pos.y += verticalVelocity * Time.deltaTime;
@@ -73,7 +76,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        transform.position = pos;
+        rb.MovePosition(pos);
     }
     public void ExecuteLongJump()
     {

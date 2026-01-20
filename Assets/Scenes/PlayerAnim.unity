@@ -331,6 +331,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChunkSpawner
   chunkPrefabs:
   - {fileID: 1068940566647318664, guid: 7734ec9f5ceb34446a0e516640d7916e, type: 3}
+  specialPrefabs: []
+  longGapPrefab: {fileID: 0}
   poolSize: 6
   moveSpeed: 8
   factory: {fileID: 981145843}
@@ -431,6 +433,10 @@ MonoBehaviour:
   tunnelPrefab: {fileID: 0}
   difficulty: {fileID: 784584413}
   offsetY: 1
+  offsetYBreakWall: 2
+  chunkLength: 25
+  offsetYLowBlock: 2
+  offsetYTunnelWall: 0.5
 --- !u!4 &981145844
 Transform:
   m_ObjectHideFlags: 0
@@ -741,10 +747,13 @@ MonoBehaviour:
   input: {fileID: 1676121713}
   p1: {fileID: 15277987}
   p2: {fileID: 2051972412}
+  Ball: {fileID: 0}
   laneX:
   - -4
   - 0
   - 4
+  state: 0
+  slideState: 0
 --- !u!4 &1395152489
 Transform:
   m_ObjectHideFlags: 0
