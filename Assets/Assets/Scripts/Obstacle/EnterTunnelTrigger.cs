@@ -4,7 +4,6 @@ using UnityEngine;
 public class EnterTunnelTrigger : MonoBehaviour
 {
     public static EnterTunnelTrigger Current;
-
     
     private void Awake()
     {
@@ -12,6 +11,14 @@ public class EnterTunnelTrigger : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Enter Slide Zone");
+        CharacterManager.Instance.OnEnterSlideZone();
+        
+    }
+    
+    private void OnTriggerStay(Collider other)
+    {
+        
         CharacterManager.Instance.OnEnterSlideZone();
         
     }

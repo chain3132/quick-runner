@@ -16,7 +16,11 @@ public class GameManager : MonoBehaviour
     }
     public void Restart()
     {
-        Time.timeScale = 1f;
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1f;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
     }
 }

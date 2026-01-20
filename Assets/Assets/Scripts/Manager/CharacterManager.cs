@@ -20,6 +20,7 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager Instance;
 
     public InputHandler input;
+    
     public PlayerController p1;
     public PlayerController p2;
     public GameObject Ball;
@@ -34,16 +35,22 @@ public class CharacterManager : MonoBehaviour
     private bool laneInputLockP2;
     public SyncJumpState state = SyncJumpState.None;
     public SyncSlideState slideState = SyncSlideState.None;
-
+    public System.Action OnBothPlayersSameLane;
+    public System.Action OnPlayersSeparated;
+    [Header("Camera Sync Settings")]
+    public float sameLaneDurationRequired = 1f;
+    public bool cameraTriggered = false;
+    private float sameLaneTimer = 0f;
     
-    private bool p1Inside;
-    private bool p2Inside;
+    public bool p1Inside;
+    public bool p2Inside;
     private bool p1Jumped;
     private bool p2Jumped;
     private bool p1Slided;
     private bool p2Slided;
     float jumpTimer = 2f;
-
+    
+    
     
     private void Awake()
     {
@@ -68,6 +75,8 @@ public class CharacterManager : MonoBehaviour
         ApplyOffsetLogic();
         TickSyncJump();
         TickSyncSlide();
+        TickSameLaneCameraTrigger();
+
     }
     
     void HandleVerticalInput(PlayerController p, float y)
@@ -75,7 +84,6 @@ public class CharacterManager : MonoBehaviour
         if (y > 0.5f)
         {
             p.Jump();
-        
             if (state == SyncJumpState.WaitingJumpInput)
             {
                 if (p == p1) p1Jumped = true;
@@ -86,11 +94,12 @@ public class CharacterManager : MonoBehaviour
         if (y < -0.5f)
         {
             p.Slide();
-        
             if (slideState == SyncSlideState.WaitingSlideInput)
             {
                 if (p == p1) p1Slided = true;
                 if (p == p2) p2Slided = true;
+                Debug.Log(p2Slided);
+                Debug.Log(p1Slided);
             }
         }
           
@@ -184,7 +193,7 @@ public class CharacterManager : MonoBehaviour
     }
     bool IsPlayerInside(PlayerController p)
     {
-        return Vector3.Distance(p.transform.position, LongGapTrigger.Current.transform.position) < 5f;
+        return Vector3.Distance(p.GetComponent<Rigidbody>().position, LongGapTrigger.Current.transform.position) < 30f;
     }
 
     void TickSyncJump()
@@ -197,8 +206,6 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (laneP1 != laneP2)
                     {
-                       GameManager.Instance.Fail();
-
                         return;
                     }
                     state = SyncJumpState.WaitingJumpInput;
@@ -237,8 +244,6 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (laneP1 != laneP2)
                     {
-                        GameManager.Instance.Fail();
-
                         return;
                     }
                     slideState = SyncSlideState.WaitingSlideInput;
@@ -296,6 +301,31 @@ public class CharacterManager : MonoBehaviour
     public void OnFailedSlide()
     {
         Debug.Log("Failed to slide in time");
+        
         GameManager.Instance.Fail();
+    }
+    
+    void TickSameLaneCameraTrigger()
+    {
+        if (laneP1 == laneP2)
+        {
+            sameLaneTimer += Time.deltaTime;
+
+            if (!cameraTriggered && sameLaneTimer >= sameLaneDurationRequired)
+            {
+                cameraTriggered = true;
+                OnBothPlayersSameLane?.Invoke();
+            }
+        }
+        else
+        {
+            if (cameraTriggered)
+            {
+                OnPlayersSeparated?.Invoke();
+            }
+
+            sameLaneTimer = 0f;
+            cameraTriggered = false;
+        }
     }
 }

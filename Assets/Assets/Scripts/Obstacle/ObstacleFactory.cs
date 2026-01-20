@@ -13,22 +13,28 @@ public class ObstacleFactory : MonoBehaviour
     public float chunkLength = 25f;
     public float offsetYLowBlock =2;
     public float offsetYTunnelWall = 0.5f;
-    public GameObject SpawnBlock(Transform laneParent)
+    public GameObject SpawnBlockAt(Transform laneParent, float z)
     {
-        float zOffset = Random.Range(2f, chunkLength - 2f); // กันไม่ให้ชิดหัว-ท้ายเกินไป
-        Vector3 pos = laneParent.position + new Vector3(0, offsetY, zOffset);
-
+        Vector3 pos = laneParent.position + new Vector3(0, offsetY, z);
         GameObject obj = Instantiate(blockPrefab, pos, blockPrefab.transform.rotation);
         obj.transform.SetParent(laneParent);
         return obj;
     }
-
-    public GameObject SpawnLowBlock(Transform laneParent)
+    public void SpawnTypeAt(ObstacleType type, Transform laneParent, float z)
     {
-        float zOffset = Random.Range(2f, chunkLength - 2f);
-        
-        Vector3 pos = laneParent.position + new Vector3(0, offsetYLowBlock, zOffset);
-
+        switch (type)
+        {
+            case ObstacleType.Jump:
+                SpawnBlockAt(laneParent, z);
+                break;
+            case ObstacleType.Slide:
+                SpawnLowBlockAt(laneParent, z);
+                break;
+        }
+    }
+    public GameObject SpawnLowBlockAt(Transform laneParent, float z)
+    {
+        Vector3 pos = laneParent.position + new Vector3(0, offsetYLowBlock, z);
         GameObject obj = Instantiate(lowBlockPrefab, pos, lowBlockPrefab.transform.rotation);
         obj.transform.SetParent(laneParent);
         obj.transform.localPosition += new Vector3(-0.1f, 0, 0);

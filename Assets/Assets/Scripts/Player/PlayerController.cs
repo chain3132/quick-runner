@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
         transform.position = pos;
         if (longJumping)
         {
-            verticalVelocity += gravity * 1.5f * Time.deltaTime;
+            verticalVelocity += Mathf.Abs( 2f * Time.deltaTime);
 
             if (IsGrounded())
             {
@@ -85,7 +85,6 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump()
     {
-        Debug.Log("Jump");
         if (IsGrounded() && !isSliding)
         {
             verticalVelocity = jumpForce;

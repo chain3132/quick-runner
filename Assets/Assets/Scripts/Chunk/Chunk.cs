@@ -51,21 +51,87 @@
 
         void GenerateObstaclePattern()
         {
-            int pattern = difficulty.GetPattern(); // ตัดสินใจ pattern จาก difficulty
+            int slotCount = Random.Range(2, 3); // จำนวน obstacle 1–2ต่อ chunk
+            float minSpacing = 6f;
+    
+            float[] zSlots = GenerateSlotLayout(slotCount, minSpacing, chunkLength: 25f);
 
-            switch (pattern)
+            for (int i = 0; i < slotCount; i++)
             {
-                case 0:
-                    SpawnOneLane();
-                    break;
-                case 1:
-                    SpawnTwoLanes();
-                    break;
-                case 2:
-                    // ไม่มี obstacle ใน chunk นี้
-                    break;
+                SpawnSlot(zSlots[i]);
             }
         }
+        float[] GenerateSlotLayout(int count, float minSpacing, float chunkLength)
+        {
+            System.Collections.Generic.List<float> slots = new System.Collections.Generic.List<float>();
+
+            int attempts = 0;
+            while (slots.Count < count && attempts < 50)
+            {
+                attempts++;
+                float z = Random.Range(2f, chunkLength - 2f);
+
+                bool valid = true;
+                foreach (var s in slots)
+                {
+                    if (Mathf.Abs(s - z) < minSpacing)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (valid)
+                {
+                    slots.Add(z);
+                }
+            }
+
+            slots.Sort();
+            return slots.ToArray();
+        }
+        void SpawnSlot(float z)
+        {
+            float r = Random.value;
+
+            if (r < 0.7f)
+            {
+                SpawnSingleLane(z);
+            }
+            else if (r < 0.9f)
+            {
+                SpawnTwoLanes(z);
+            }
+            else
+            {
+                SpawnAllLanes(z);
+            }
+        }
+        void SpawnSingleLane(float z)
+        {
+            int lane = Random.Range(0, 3);
+            var type = RollObstacleType();
+            factory.SpawnTypeAt(type, lanePoints[lane], z);
+        }
+
+        void SpawnTwoLanes(float z)
+        {
+            int a = Random.Range(0, 3);
+            int b;
+            do { b = Random.Range(0, 3); } while (b == a);
+
+            factory.SpawnTypeAt(RollObstacleType(), lanePoints[a], z);
+            factory.SpawnTypeAt(RollObstacleType(), lanePoints[b], z);
+        }
+
+        void SpawnAllLanes(float z)
+        {
+            for (int lane = 0; lane < 3; lane++)
+            {
+                factory.SpawnTypeAt(RollObstacleType(), lanePoints[lane], z);
+            }
+        }
+        
         void GenerateSpecialPattern()
         {
             switch(specialType)
@@ -94,38 +160,8 @@
             factory.SpawnTunnel(lanePoints[1]);
         }
 
-        void SpawnOneLane()
-        {
-            int lane = Random.Range(0, 3);
-            var type = RollObstacleType();
-            SpawnType(type, lanePoints[lane]);
-        }
+        
 
-        void SpawnTwoLanes()
-        {
-            int a = Random.Range(0, 3);
-            int b;
-            do
-            {
-                b = Random.Range(0, 3);
-            } while (b == a);
-
-            var tA = RollObstacleType();
-            var tB = RollObstacleType();
-
-            SpawnType(tA, lanePoints[a]);
-            SpawnType(tB, lanePoints[b]);
-        }
-        void SpawnType(ObstacleType type, Transform lane)
-        {
-            switch(type)
-            {
-                case ObstacleType.Jump:
-                    factory.SpawnBlock(lane);
-                    break;
-                case ObstacleType.Slide:
-                    factory.SpawnLowBlock(lane);
-                    break;
-            }
-        }
+        
+        
     }
