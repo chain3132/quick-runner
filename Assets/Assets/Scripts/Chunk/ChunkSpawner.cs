@@ -39,7 +39,7 @@ public class ChunkSpawner : MonoBehaviour
     SpecialType RollSpecialTypeBalanced()
     {
         float r = Random.value;
-        if (r < 0.4f) return SpecialType.BreakWall;
+        if (r < 0.5f) return SpecialType.BreakWall;
         else if (r < 0.8f) return SpecialType.ShrinkTunnel;
         else return SpecialType.LongGap; // 20%
         

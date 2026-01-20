@@ -14,6 +14,10 @@ public class LongGapTrigger : MonoBehaviour
     {
         CharacterManager.Instance.OnEnterLongGapZone();
     }
+    private void OnTriggerExit(Collider other)
+    {
+        CharacterManager.Instance.OnExitLongGapZone();
+    }
     
     
 }
