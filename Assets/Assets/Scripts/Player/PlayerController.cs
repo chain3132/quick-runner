@@ -4,7 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     public float lerpSpeed = 10f;
     public float targetX;
-
+    public bool isPlayerDie = false;
     
     public float jumpForce = 7f;
     public float gravity = -20f;
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     bool longJumping;
     float airTime;
     private Rigidbody rb;
+    
 
     void Start()
     {
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour
         pos.y += verticalVelocity * Time.deltaTime;
     
         // Ground
-        if (pos.y <= trackHeight)
+        if (pos.y <= trackHeight && !isPlayerDie )
         {
             pos.y = trackHeight;
             verticalVelocity = 0f;

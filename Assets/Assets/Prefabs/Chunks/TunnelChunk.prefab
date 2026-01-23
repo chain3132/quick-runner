@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf5ed022546c374499cd1586e5a1ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChunkMover
-  speed: 5
+  speed: 0
 --- !u!114 &8679592827459236262
 MonoBehaviour:
   m_ObjectHideFlags: 0

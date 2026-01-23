@@ -16,7 +16,13 @@ public class LongGapTrigger : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        CharacterManager.Instance.OnExitLongGapZone();
+        
+        var playerController = other.gameObject.GetComponent<PlayerController>();
+        var playerRigidbody = other.gameObject.GetComponent<Rigidbody>();
+        
+        playerController.isPlayerDie = true;
+        playerRigidbody.useGravity = true;
+        //CharacterManager.Instance.OnExitLongGapZone();
     }
     
     
