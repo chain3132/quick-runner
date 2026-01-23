@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
         var pos = transform.position;
         pos.y = trackHeight;
         transform.position = pos;
+        rb.constraints = RigidbodyConstraints.FreezeRotation
+                         | RigidbodyConstraints.FreezePositionY;
+        rb.useGravity = false;
     }
     private void Update()
     {
@@ -52,6 +55,8 @@ public class PlayerController : MonoBehaviour
         {
             pos.y = trackHeight;
             verticalVelocity = 0f;
+            rb.constraints = RigidbodyConstraints.FreezeRotation
+                             | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
         }
         
         // Slide timer
@@ -76,11 +81,18 @@ public class PlayerController : MonoBehaviour
                 CharacterManager.Instance.OnLongJumpLanded();
             }
         }
-
+        if (IsGrounded())
+        {
+            Vector3 v = rb.velocity;
+            v.y = 0f;
+            rb.velocity = v;
+        }
         rb.MovePosition(pos);
     }
     public void ExecuteLongJump()
     {
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+
         verticalVelocity = jumpForce * 1.8f; 
         longJumping = true;
     }
@@ -88,6 +100,8 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded() && !isSliding)
         {
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+
             verticalVelocity = jumpForce;
             animator.SetTrigger("Jump");
         }

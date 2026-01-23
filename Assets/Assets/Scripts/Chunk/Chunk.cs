@@ -1,4 +1,7 @@
+    using MoreMountains.Feedbacks;
     using UnityEngine;
+    using UnityEngine.PlayerLoop;
+
     public enum ObstacleType
     {
         Jump,
@@ -16,6 +19,7 @@
         public ObstacleFactory factory;
         public DifficultyController difficulty;
         public bool isFirstChunk;
+        
         bool isSpecial = false;
         SpecialType specialType;
         

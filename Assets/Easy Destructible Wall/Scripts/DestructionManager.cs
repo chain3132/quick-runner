@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using MoreMountains.Feedbacks;
 
 namespace EasyDestuctibleWall {
     public class DestructionManager : MonoBehaviour {
@@ -10,6 +11,7 @@ namespace EasyDestuctibleWall {
         [SerializeField]
         private float health = 100f;
 
+
         // These two variables are used to multiply damage based on velocity and torque respectively.
         [SerializeField]
         private float impactMultiplier = 2.25f;
@@ -17,9 +19,19 @@ namespace EasyDestuctibleWall {
         private float twistMultiplier = 0.0025f;
 
         private Rigidbody cachedRigidbody;
+        private MMF_Player hitFeedback;
 
         private void Awake() {
             cachedRigidbody = GetComponent<Rigidbody>();
+        }
+
+        private void Start()
+        {
+            if (hitFeedback == null)
+            {
+                hitFeedback = FindAnyObjectByType<MMF_Player>();
+            }
+            
         }
 
         private void FixedUpdate()
@@ -34,6 +46,8 @@ namespace EasyDestuctibleWall {
             }        
         }
 
+        
+
         void OnCollisionEnter(Collision collision) {
             var pc = collision.collider.GetComponent<PlayerController>();
             if (pc == null)
@@ -46,12 +60,14 @@ namespace EasyDestuctibleWall {
             if (!sameLane)
             {
                 Debug.Log("DestructionManager: not same land → Game Over");
+                
                 GameManager.Instance.Fail();
                 return;
             }
 
             // *** case ผ่านเงื่อนไข lane → ให้แตกตามระบบเดิม ***
-
+            hitFeedback.PlayFeedbacks();
+            TimeController.Instance.PlaySlow(0.3f, 0.2f);
             if (collision.rigidbody)
             {
                 health -=  impactMultiplier * collision.rigidbody.mass;
@@ -59,5 +75,6 @@ namespace EasyDestuctibleWall {
             else
                 health -= impactMultiplier;
         }
+        
     }
 }

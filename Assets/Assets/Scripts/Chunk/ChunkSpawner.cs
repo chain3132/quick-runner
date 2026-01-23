@@ -1,15 +1,15 @@
 using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 public class ChunkSpawner : MonoBehaviour
 {
+    
     public List<GameObject> chunkPrefabs;
     public List<GameObject> specialPrefabs;
     public GameObject longGapPrefab;
-
     public int poolSize = 6;
-    public float moveSpeed = 8f;
-
+    
     private readonly Queue<GameObject> active = new Queue<GameObject>();
     private Transform lastExit;
     public ObstacleFactory factory;
@@ -18,8 +18,7 @@ public class ChunkSpawner : MonoBehaviour
     private bool previousWasLongGap = false;
     private int longGapRemaining = 0;
     private bool lastWasSpecial = false;
-
-
+    
 
     void Start()
     {
@@ -42,18 +41,17 @@ public class ChunkSpawner : MonoBehaviour
         // if (r < 0.5f) return SpecialType.BreakWall;
         // else if (r < 0.8f) return SpecialType.ShrinkTunnel;
         // else return SpecialType.LongGap; // 20%
-        return SpecialType.LongGap;
-
-
+        return SpecialType.BreakWall;
 
     }
     void SpawnFirstChunk()
     {
         var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
         var obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-        obj.GetComponent<Chunk>().factory = factory;
-        obj.GetComponent<Chunk>().difficulty = difficulty;
-        obj.GetComponent<Chunk>().isFirstChunk = true;
+        var chuck = obj.GetComponent<Chunk>();
+        chuck.factory = factory;
+        chuck.difficulty = difficulty;
+        chuck.isFirstChunk = true;
         active.Enqueue(obj);
         lastExit = obj.transform.Find("ExitPoint");
     }
@@ -162,7 +160,7 @@ public class ChunkSpawner : MonoBehaviour
     {
         foreach (var chunk in active)
         {
-            chunk.transform.position += Vector3.back * moveSpeed * Time.deltaTime;
+            chunk.transform.position += Vector3.back * DistanceManager.Instance.speed * Time.deltaTime;
         }
     }
 

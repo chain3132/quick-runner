@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 public class ObstacleFactory : MonoBehaviour
@@ -13,14 +14,20 @@ public class ObstacleFactory : MonoBehaviour
     public float chunkLength = 25f;
     public float offsetYLowBlock =2;
     public float offsetYTunnelWall = 0.5f;
+    [SerializeField]
+    public MMF_Player hitFeedBack; 
     public GameObject SpawnBlockAt(Transform laneParent, float z)
     {
         Vector3 pos = laneParent.position + new Vector3(0, offsetY, z);
         GameObject obj = Instantiate(blockPrefab, pos, blockPrefab.transform.rotation);
+        var obstacle = obj.GetComponent<HitObstacle>();
+
+        obstacle.Initialize(hitFeedBack);
+
         obj.transform.SetParent(laneParent);
         return obj;
     }
-    public void SpawnTypeAt(ObstacleType type, Transform laneParent, float z)
+    public void SpawnTypeAt(ObstacleType type, Transform laneParent, float z )
     {
         switch (type)
         {
@@ -36,6 +43,8 @@ public class ObstacleFactory : MonoBehaviour
     {
         Vector3 pos = laneParent.position + new Vector3(0, offsetYLowBlock, z);
         GameObject obj = Instantiate(lowBlockPrefab, pos, lowBlockPrefab.transform.rotation);
+        var obstacle = obj.GetComponent<HitObstacle>();
+        obstacle.Initialize(hitFeedBack);
         obj.transform.SetParent(laneParent);
         obj.transform.localPosition += new Vector3(-0.1f, 0, 0);
         return obj;

@@ -1463,6 +1463,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1544,6 +1546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1625,6 +1629,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1705,6 +1711,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1784,6 +1792,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1865,6 +1875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -1946,6 +1958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2027,6 +2041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2107,6 +2123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2187,6 +2205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2266,6 +2286,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2349,6 +2371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2431,6 +2455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2512,6 +2538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2593,6 +2621,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025
@@ -2674,6 +2704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bf4647e36d9ca42b762b0a665e9ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   health: 100
   impactMultiplier: 2.25
   twistMultiplier: 0.0025

@@ -5,17 +5,13 @@ using UnityEngine;
 
 public class HitObstacle : MonoBehaviour
 {
-    [SerializeField] private MMF_Player hitFeedback;
     [SerializeField] private float failDelay = 0.5f;
-    
-    private void Start()
+    private MMF_Player _hitFeedBack;
+    public void Initialize(MMF_Player hitFeedback)
     {
-        if (hitFeedback == null )
-        {
-            hitFeedback = FindAnyObjectByType<MMF_Player>();
-            Debug.Log(hitFeedback);
-        }
+        _hitFeedBack = hitFeedback;
     }
+    
 
     private void OnCollisionEnter(Collision other)
     {
@@ -28,7 +24,7 @@ public class HitObstacle : MonoBehaviour
     private IEnumerator HitSequence()
     {
         
-        hitFeedback.PlayFeedbacks();
+        _hitFeedBack.PlayFeedbacks();
 
         yield return new WaitForSeconds(failDelay);
 
