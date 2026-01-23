@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     bool longJumping;
     float airTime;
     private Rigidbody rb;
+    private bool forceCentering;
     
 
     void Start()
@@ -45,8 +46,24 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Vector3 pos = rb.position;;
-        pos.x = Mathf.Lerp(pos.x, targetX, lerpSpeed * Time.deltaTime);
-        
+        if (forceCentering)
+        {
+            pos.x = Mathf.MoveTowards(
+                pos.x,
+                targetX,
+                lerpSpeed * 10 * Time.deltaTime
+            );
+
+            if (Mathf.Abs(pos.x - targetX) < 0.01f)
+            {
+                pos.x = targetX;
+                forceCentering = false;
+            }
+        }
+        else
+        {
+            pos.x = Mathf.Lerp(pos.x, targetX, lerpSpeed * Time.deltaTime);
+        }        
         verticalVelocity += gravity * Time.deltaTime;
         pos.y += verticalVelocity * Time.deltaTime;
     
@@ -88,6 +105,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = v;
         }
         rb.MovePosition(pos);
+    }
+    public void MoveToX(float x)
+    {
+        targetX = x;
+        forceCentering = true;
     }
     public void ExecuteLongJump()
     {
@@ -134,6 +156,11 @@ public class PlayerController : MonoBehaviour
     {
         col.height = originalHeight;
         col.center = originalCenter;
+    }
+
+    public void Dead()
+    {
+        animator.SetTrigger("Dead");
     }
     
 

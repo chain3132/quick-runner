@@ -32,6 +32,10 @@ public class ChunkSpawner : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.isGameOver)
+        {
+            return;
+        }
         MoveChunks();
         RecycleChunks();
     }
@@ -41,13 +45,14 @@ public class ChunkSpawner : MonoBehaviour
         // if (r < 0.5f) return SpecialType.BreakWall;
         // else if (r < 0.8f) return SpecialType.ShrinkTunnel;
         // else return SpecialType.LongGap; // 20%
-        return SpecialType.BreakWall;
+        return SpecialType.ShrinkTunnel;
 
     }
     void SpawnFirstChunk()
     {
         var prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
         var obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        obj.transform.position = new Vector3(0, -4.75f, 0);
         var chuck = obj.GetComponent<Chunk>();
         chuck.factory = factory;
         chuck.difficulty = difficulty;
@@ -146,6 +151,7 @@ public class ChunkSpawner : MonoBehaviour
     {
         var prefab = chunkPrefabs[0];
         var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+        obj.transform.position = new Vector3(obj.transform.position.x, -4.75f, obj.transform.position.z);
 
         var c = obj.GetComponent<Chunk>();
         c.factory = factory;
@@ -169,7 +175,7 @@ public class ChunkSpawner : MonoBehaviour
         var first = active.Peek();
 
         // เช็คว่า chunk หลุดกล้องหรือยัง
-        if (first.transform.position.z < -50f)
+        if (first.transform.position.z < -25f)
         {
             active.Dequeue();
             Destroy(first);

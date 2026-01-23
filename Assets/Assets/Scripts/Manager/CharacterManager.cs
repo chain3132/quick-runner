@@ -13,6 +13,7 @@ public enum SyncSlideState
     WaitingZoneTrigger,
     WaitingBothPlayers,
     WaitingSlideInput,
+    MovingToCenter, 
     ExecutingSlide
 }
 public class CharacterManager : MonoBehaviour
@@ -159,15 +160,7 @@ public class CharacterManager : MonoBehaviour
         if (!p1Inside ) p1Inside = true;
         if (!p2Inside ) p2Inside = true;
     }
-    public void OnExitTunnelZone()
-    {
-        if (slideState != SyncSlideState.ExecutingSlide)
-        {
-            Debug.Log("Exited Slide Zone too early");
-            GameManager.Instance.Fail();
-        }
-            
-    }
+    
     public void OnEnterLongGapZone()
     {
         if (state == SyncJumpState.WaitingZoneTrigger)
@@ -186,11 +179,7 @@ public class CharacterManager : MonoBehaviour
         }
             
     }
-    bool IsPlayerInsideSlideZone(PlayerController p)
-    {
-        Debug.Log(Vector3.Distance(p.transform.position, EnterTunnelTrigger.Current.transform.position) < 5f);
-        return Vector3.Distance(p.transform.position, EnterTunnelTrigger.Current.transform.position) < 5f;
-    }
+    
     bool IsPlayerInside(PlayerController p)
     {
         return Vector3.Distance(p.GetComponent<Rigidbody>().position, LongGapTrigger.Current.transform.position) < 30f;
@@ -253,17 +242,39 @@ public class CharacterManager : MonoBehaviour
             case SyncSlideState.WaitingSlideInput:
                 if (p1Slided && p2Slided)
                 {
-                    Debug.Log("Both players slid!");
-                    slideState = SyncSlideState.ExecutingSlide;
-                    ExecuteSlide();
+                    slideState = SyncSlideState.MovingToCenter;
+                    StartMovePlayersToCenter();
                     break;
                 }
                 break;
-
+            case SyncSlideState.MovingToCenter:
+                if (IsBothPlayersCentered())
+                {
+                    slideState = SyncSlideState.ExecutingSlide;
+                    ExecuteSlide();
+                }
+                break;
             case SyncSlideState.ExecutingSlide:
                 // air lock, no lane switching
                 break;
         }
+    }
+    bool IsBothPlayersCentered()
+    {
+        float centerX = laneX[laneP1];
+        const float threshold = 0.05f;
+
+        bool p1Ok = Mathf.Abs(p1.transform.position.x - centerX) < threshold;
+        bool p2Ok = Mathf.Abs(p2.transform.position.x - centerX) < threshold;
+
+        return p1Ok && p2Ok;
+    }
+    void StartMovePlayersToCenter()
+    {
+        float centerX = laneX[laneP1]; // lane เดียวกันแล้ว
+        Debug.Log("Moving both players to center at X = " + centerX);
+        p1.MoveToX(centerX);
+        p2.MoveToX(centerX);
     }
     void ExecuteLongJump()
     {
@@ -274,6 +285,7 @@ public class CharacterManager : MonoBehaviour
     
     void ExecuteSlide()
     {
+        
         p1.gameObject.SetActive(false);
         p2.gameObject.SetActive(false);
         Ball.SetActive(true);

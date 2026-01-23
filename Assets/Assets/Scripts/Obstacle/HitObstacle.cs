@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HitObstacle : MonoBehaviour
 {
-    [SerializeField] private float failDelay = 0.5f;
+    [SerializeField] private float failDelay = 1f;
     private MMF_Player _hitFeedBack;
     public void Initialize(MMF_Player hitFeedback)
     {
@@ -17,17 +17,19 @@ public class HitObstacle : MonoBehaviour
     {
         if (other.collider.CompareTag("P1" ) || other.collider.CompareTag("P2"))
         {
-            StartCoroutine(HitSequence());
+            GameManager.Instance.isGameOver = true;
+            var player = other.collider.GetComponent<PlayerController>();
+            player.Dead();
+            StartCoroutine(HitSequence(player));
         }
     }
     
-    private IEnumerator HitSequence()
+    private IEnumerator HitSequence(PlayerController player)
     {
-        
         _hitFeedBack.PlayFeedbacks();
-
+        GameManager.Instance.SpawnDrone(player.transform);
         yield return new WaitForSeconds(failDelay);
-
         GameManager.Instance.Fail();
     }
+    
 }

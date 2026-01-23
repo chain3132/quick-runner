@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26409ada02b785b48a177cf315776d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitObstacle
+  failDelay: 7.6
 --- !u!64 &-1748758308099743877
 MeshCollider:
   m_ObjectHideFlags: 0

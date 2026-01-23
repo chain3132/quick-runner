@@ -5,9 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameObject failUI;
+    public GameObject drone;
+    public Transform parent;
+    public bool isGameOver = false;
     private void Awake()
     {
         Instance = this;
+        
     }
     public void Fail()
     {
@@ -23,4 +27,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         
     }
+    public void SpawnDrone(Transform target)
+    {
+        Instantiate(drone,parent);
+        parent.localPosition = new Vector3(target.position.x, 0, target.position.z);
+    }
+    
 }

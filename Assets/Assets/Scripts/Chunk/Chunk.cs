@@ -58,9 +58,9 @@
             int slotCount = Random.Range(2, 3); // จำนวน obstacle 1–2ต่อ chunk
             float minSpacing = 6f;
     
-            float[] zSlots = GenerateSlotLayout(slotCount, minSpacing, chunkLength: 25f);
+            float[] zSlots = GenerateSlotLayout(slotCount, minSpacing, chunkLength: 12.5f);
 
-            for (int i = 0; i < slotCount; i++)
+            for (int i = 0; i < zSlots.Length; i++)
             {
                 SpawnSlot(zSlots[i]);
             }
@@ -70,7 +70,7 @@
             System.Collections.Generic.List<float> slots = new System.Collections.Generic.List<float>();
 
             int attempts = 0;
-            while (slots.Count < count && attempts < 50)
+            while (slots.Count < count && attempts < 25)
             {
                 attempts++;
                 float z = Random.Range(2f, chunkLength - 2f);

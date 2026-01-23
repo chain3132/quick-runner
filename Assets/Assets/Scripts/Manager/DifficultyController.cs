@@ -1,14 +1,12 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DifficultyController : MonoBehaviour
 {
-    public float difficulty = 1f;
+    public int difficulty = 1;
     
-    void Update()
-    {
-        difficulty += Time.deltaTime * 0.1f;
-    }
-
+    
     public int GetPattern()
     {
         if (difficulty < 2f) return Random.Range(0,2); // 0 or 1
@@ -16,17 +14,51 @@ public class DifficultyController : MonoBehaviour
         return Random.Range(0,2); // ลด pattern empty เมื่อยากขึ้น
     }
 
+    private void Update()
+    {
+        if (DistanceManager.Instance.distance <= 500f)
+        {
+            difficulty = 1;
+            
+        }
+        else if (DistanceManager.Instance.distance <= 1500f)
+        {
+            difficulty = 3;
+        }
+        else
+        {
+            difficulty = 5;    
+        }
+        DistanceManager.Instance.CheckDifficulty(difficulty);
+        
+    }
+    
+
+
+
     public float GetBlockScale()
     {
         return Mathf.Clamp(1f + difficulty * 0.25f, 1f, 3f);
     }
     public bool ShouldSpawnSpecial()
     {
-        if (difficulty < 2f) return false;
+        float p = 0f;
 
-        float p = Mathf.Clamp01((difficulty - 2f) * 0.1f); 
-        // ถ้า diff=2 => 0% / diff=4 => 20% / diff=6 => 40% 
-        //Debug.Log("Special Spawn Probability: " + p);
+        switch (difficulty)
+        {
+            case 1:
+                p = 0f;      // 0%
+                break;
+
+            case 3:
+                p = 0.45f;   // 45%
+                break;
+
+            case 5:
+                p = 0.75f;   // 75%
+                break;
+        }
+
         return Random.value < p;
     }
 }
