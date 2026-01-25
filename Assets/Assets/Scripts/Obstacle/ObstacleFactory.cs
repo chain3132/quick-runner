@@ -23,10 +23,10 @@ public class ObstacleFactory : MonoBehaviour
         var obstacle = obj.GetComponent<HitObstacle>();
 
         obstacle.Initialize(hitFeedBack);
-
         obj.transform.SetParent(laneParent);
         return obj;
     }
+    
     public void SpawnTypeAt(ObstacleType type, Transform laneParent, float z )
     {
         switch (type)
@@ -59,7 +59,7 @@ public class ObstacleFactory : MonoBehaviour
 
     public GameObject SpawnTunnel(Transform laneParent)
     {
-        GameObject obj = Instantiate(tunnelPrefab, laneParent.position + new Vector3(0,offsetYTunnelWall,chunkLength / 2), tunnelPrefab.transform.rotation);
+        GameObject obj = Instantiate(tunnelPrefab, laneParent.position + new Vector3(0,offsetYTunnelWall,0), tunnelPrefab.transform.rotation);
         obj.transform.SetParent(laneParent);  
         return obj;
     }

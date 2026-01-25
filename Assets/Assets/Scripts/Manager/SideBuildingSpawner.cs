@@ -20,7 +20,6 @@ public class SideBuildingSpawner : MonoBehaviour
     public float rightX = 12f;
 
     [Header("Movement")]
-    public float moveSpeed = 10f;
     public float recycleZ = -2f;
 
     List<GameObject> leftPool = new List<GameObject>();
@@ -87,7 +86,7 @@ public class SideBuildingSpawner : MonoBehaviour
         ActivateRandomVisual(holder);
 
         var mover = holder.AddComponent<MovingBuilding>();
-        mover.speed = moveSpeed;
+        mover.speed = 13f;
 
         return holder;
     }

@@ -17,8 +17,13 @@ public class HitObstacle : MonoBehaviour
     {
         if (other.collider.CompareTag("P1" ) || other.collider.CompareTag("P2"))
         {
+            if (GameManager.Instance.isGameOver)
+            {
+                return;
+            }
             GameManager.Instance.isGameOver = true;
             var player = other.collider.GetComponent<PlayerController>();
+            player.isPlayerDie = true;
             player.Dead();
             StartCoroutine(HitSequence(player));
         }
@@ -26,10 +31,7 @@ public class HitObstacle : MonoBehaviour
     
     private IEnumerator HitSequence(PlayerController player)
     {
-        if (GameManager.Instance.isGameOver)
-        {
-            yield return null;
-        }
+        
         _hitFeedBack.PlayFeedbacks();
         GameManager.Instance.SpawnDrone(player.transform);
         yield return new WaitForSeconds(failDelay);

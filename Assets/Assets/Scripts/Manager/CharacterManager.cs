@@ -53,6 +53,7 @@ public class CharacterManager : MonoBehaviour
     
     
     
+    
     private void Awake()
     {
         Instance = this;
@@ -65,6 +66,10 @@ public class CharacterManager : MonoBehaviour
     
     private void Update()
     {
+        if (GameManager.Instance.isGameOver)
+        {
+            return;
+        }
         Vector2 m1 = input.P1Move;
         Vector2 m2 = input.P2Move;
 
@@ -94,14 +99,21 @@ public class CharacterManager : MonoBehaviour
 
         if (y < -0.5f)
         {
-            p.Slide();
+            if (!p.IsGrounded())
+            {
+                // อยู่กลางอากาศ → Fast Fall
+                p.FastFall();
+                return;
+            }
+
+            // อยู่บนพื้น → Slide
             if (slideState == SyncSlideState.WaitingSlideInput)
             {
                 if (p == p1) p1Slided = true;
                 if (p == p2) p2Slided = true;
-                Debug.Log(p2Slided);
-                Debug.Log(p1Slided);
             }
+
+            p.Slide();
         }
           
     }
@@ -154,8 +166,7 @@ public class CharacterManager : MonoBehaviour
     }
     public void OnEnterSlideZone()
     {
-        if (slideState == SyncSlideState.WaitingZoneTrigger)
-            slideState = SyncSlideState.WaitingBothPlayers;
+        slideState = SyncSlideState.WaitingBothPlayers;
 
         if (!p1Inside ) p1Inside = true;
         if (!p2Inside ) p2Inside = true;
@@ -163,8 +174,7 @@ public class CharacterManager : MonoBehaviour
     
     public void OnEnterLongGapZone()
     {
-        if (state == SyncJumpState.WaitingZoneTrigger)
-            state = SyncJumpState.WaitingBothPlayers;
+        state = SyncJumpState.WaitingBothPlayers;
 
         if (!p1Inside && IsPlayerInside(p1)) p1Inside = true;
         if (!p2Inside && IsPlayerInside(p2)) p2Inside = true;
@@ -242,19 +252,20 @@ public class CharacterManager : MonoBehaviour
             case SyncSlideState.WaitingSlideInput:
                 if (p1Slided && p2Slided)
                 {
-                    slideState = SyncSlideState.MovingToCenter;
-                    StartMovePlayersToCenter();
+                    slideState = SyncSlideState.ExecutingSlide;
+                    //StartMovePlayersToCenter();
                     break;
                 }
                 break;
-            case SyncSlideState.MovingToCenter:
-                if (IsBothPlayersCentered())
-                {
-                    slideState = SyncSlideState.ExecutingSlide;
-                    ExecuteSlide();
-                }
-                break;
+            // case SyncSlideState.MovingToCenter:
+            //     if (IsBothPlayersCentered())
+            //     {
+            //         slideState = SyncSlideState.ExecutingSlide;
+            //         ExecuteSlide();
+            //     }
+            //     break;
             case SyncSlideState.ExecutingSlide:
+                ExecuteSlide();
                 // air lock, no lane switching
                 break;
         }

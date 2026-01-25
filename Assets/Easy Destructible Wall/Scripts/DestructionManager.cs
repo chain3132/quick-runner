@@ -10,6 +10,8 @@ namespace EasyDestuctibleWall {
         // The hitpoints of the object, when this value is below 1, the chunk will fracture
         [SerializeField]
         private float health = 100f;
+        [SerializeField] private float failDelay = 1f;
+        
 
 
         // These two variables are used to multiply damage based on velocity and torque respectively.
@@ -61,13 +63,20 @@ namespace EasyDestuctibleWall {
             {
                 Debug.Log("DestructionManager: not same land → Game Over");
                 
-                GameManager.Instance.Fail();
+                if (GameManager.Instance.isGameOver)
+                {
+                    return ;
+                }
+                GameManager.Instance.isGameOver = true;
+                pc.Dead();
+                pc.isPlayerDie = true;
+                StartCoroutine(HitSequence(pc));
                 return;
             }
 
             // *** case ผ่านเงื่อนไข lane → ให้แตกตามระบบเดิม ***
             hitFeedback.PlayFeedbacks();
-            TimeController.Instance.PlaySlow(0.3f, 0.2f);
+            TimeController.Instance.PlaySlow(0.2f, 1f);
             if (collision.rigidbody)
             {
                 health -=  impactMultiplier * collision.rigidbody.mass;
@@ -75,6 +84,13 @@ namespace EasyDestuctibleWall {
             else
                 health -= impactMultiplier;
         }
-        
+        private IEnumerator HitSequence(PlayerController player)
+        {
+            
+            hitFeedback.PlayFeedbacks();
+            GameManager.Instance.SpawnDrone(player.transform);
+            yield return new WaitForSeconds(failDelay);
+            GameManager.Instance.Fail();
+        }
     }
 }

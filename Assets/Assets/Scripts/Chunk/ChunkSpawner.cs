@@ -18,10 +18,14 @@ public class ChunkSpawner : MonoBehaviour
     private bool previousWasLongGap = false;
     private int longGapRemaining = 0;
     private bool lastWasSpecial = false;
+    private float currentSpeed;
     
+    [SerializeField] bool testMode = false;
+    [SerializeField] SpecialType testSpecialType = SpecialType.ShrinkTunnel;
 
     void Start()
     {
+        currentSpeed = DistanceManager.Instance.speed;
         // spawn chunk แรกที่ตำแหน่ง origin
         SpawnFirstChunk();
         
@@ -36,16 +40,27 @@ public class ChunkSpawner : MonoBehaviour
         {
             return;
         }
+
+        if (currentSpeed != DistanceManager.Instance.speed)
+        {
+            currentSpeed = Mathf.MoveTowards(
+                currentSpeed,
+                DistanceManager.Instance.speed,
+                2f * Time.deltaTime);
+        }
         MoveChunks();
         RecycleChunks();
     }
     SpecialType RollSpecialTypeBalanced()
     {
-        // float r = Random.value;
-        // if (r < 0.5f) return SpecialType.BreakWall;
-        // else if (r < 0.8f) return SpecialType.ShrinkTunnel;
-        // else return SpecialType.LongGap; // 20%
-        return SpecialType.ShrinkTunnel;
+        if (testMode)
+        {
+            return testSpecialType;
+        }
+        float r = Random.value;
+        if (r < 0.5f) return SpecialType.BreakWall;
+        else if (r < 0.8f) return SpecialType.ShrinkTunnel;
+        else return SpecialType.LongGap; // 20%
 
     }
     void SpawnFirstChunk()
@@ -164,6 +179,7 @@ public class ChunkSpawner : MonoBehaviour
     
     void MoveChunks()
     {
+       
         foreach (var chunk in active)
         {
             chunk.transform.position += Vector3.back * DistanceManager.Instance.speed * Time.deltaTime;

@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
     float airTime;
     private Rigidbody rb;
     private bool forceCentering;
-    
+    [Header("Fast Fall")]
+    public float fastFallSpeed = -35f;
+    private bool isFastFalling;
 
     void Start()
     {
@@ -45,6 +47,15 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if (GameManager.Instance.isGameOver)
+        {
+            if (!this.isPlayerDie)
+            {
+                Debug.Log("PlayerController: Pray animation");
+                animator.SetTrigger("Pray");
+            }
+            return;
+        }
         Vector3 pos = rb.position;;
         if (forceCentering)
         {
@@ -72,6 +83,7 @@ public class PlayerController : MonoBehaviour
         {
             pos.y = trackHeight;
             verticalVelocity = 0f;
+            isFastFalling = false;
             rb.constraints = RigidbodyConstraints.FreezeRotation
                              | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
         }
@@ -111,6 +123,14 @@ public class PlayerController : MonoBehaviour
         targetX = x;
         forceCentering = true;
     }
+    public void FastFall()
+    {
+        if (!IsGrounded())
+        {
+            verticalVelocity = fastFallSpeed;
+            isFastFalling = true;
+        }
+    }
     public void ExecuteLongJump()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -140,9 +160,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
-        return transform.position.y <= trackHeight + 0.01f;
+        return Mathf.Abs(transform.position.y - trackHeight) < 0.02f;
     }
 
     void ShrinkCollider()
