@@ -82,6 +82,8 @@ public class SideBuildingSpawner : MonoBehaviour
             visual.SetActive(false);
         }
 
+        holder.AddComponent<BuildingHolderData>();
+
         ActivateRandomVisual(holder);
 
         var mover = holder.AddComponent<MovingBuilding>();
@@ -92,27 +94,48 @@ public class SideBuildingSpawner : MonoBehaviour
 
     void ActivateRandomVisual(GameObject holder)
     {
-        int index = Random.Range(0, holder.transform.childCount);
+        var data = holder.GetComponent<BuildingHolderData>();
+        int count = holder.transform.childCount;
 
-        for (int i = 0; i < holder.transform.childCount; i++)
+        if (count <= 1)
+        {
+            holder.transform.GetChild(0).gameObject.SetActive(true);
+            return;
+        }
+
+        int index;
+        do
+        {
+            index = Random.Range(0, count);
+        }
+        while (index == data.lastIndex);
+
+        data.lastIndex = index;
+
+        for (int i = 0; i < count; i++)
         {
             GameObject v = holder.transform.GetChild(i).gameObject;
-            v.SetActive(i == index);
+            bool active = (i == index);
+            v.SetActive(active);
 
-            if (i == index)
-            {
+            if (active)
                 AlignToGround(v);
-            }
         }
     }
     void AlignToGround(GameObject visual)
     {
-        Renderer r = visual.GetComponentInChildren<MeshRenderer>();
-        if (r == null) return;
+        var offsetData = visual.GetComponent<BuildingYOffset>();
 
-        float bottomY = r.bounds.min.y;
-        float offset = visual.transform.position.y - bottomY;
+        float targetY = 0f;
+        if (offsetData != null)
+        {
+            targetY = offsetData.yOffset;
+        }
 
-        visual.transform.position += Vector3.up * offset;
+        visual.transform.localPosition = new Vector3(
+            0f,
+            targetY,
+            0f
+        );
     }
 }

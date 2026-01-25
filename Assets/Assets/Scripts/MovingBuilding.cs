@@ -7,6 +7,10 @@ public class MovingBuilding : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.isGameOver)
+        {
+            return;
+        }
         speed = DistanceManager.Instance.speed;
         transform.position += Vector3.back * speed * Time.deltaTime;
 

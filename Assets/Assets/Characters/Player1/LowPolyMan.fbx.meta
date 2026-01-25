@@ -3,7 +3,52 @@ guid: 7c930a19bc07580449f2c71abd119a50
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Belt
+    second: {fileID: 2100000, guid: 93697a84cebf6014c901363d6b17602a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackShirt
+    second: {fileID: 2100000, guid: 1ed62e73cd9d79f409ad7cbfd7fd557a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Flesh
+    second: {fileID: 2100000, guid: 6505a31183a46f048b73438786c44653, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GreyShirt
+    second: {fileID: 2100000, guid: dec58e23be8f1b646858f3f670d9b0ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hair
+    second: {fileID: 2100000, guid: 5271b831818207b40a0c11215ce80f05, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalGrey
+    second: {fileID: 2100000, guid: aeb8a0cad7c6a9248bf7637519209c7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Neon
+    second: {fileID: 2100000, guid: c737221c35fa12147a601e27985972ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShoeDarkerGrey
+    second: {fileID: 2100000, guid: 5e7cacaef1bf937459354072ec45bd0c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Watch
+    second: {fileID: 2100000, guid: e83f14e54f826394e8c769db729ea55e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

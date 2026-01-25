@@ -26,6 +26,10 @@ public class HitObstacle : MonoBehaviour
     
     private IEnumerator HitSequence(PlayerController player)
     {
+        if (GameManager.Instance.isGameOver)
+        {
+            yield return null;
+        }
         _hitFeedBack.PlayFeedbacks();
         GameManager.Instance.SpawnDrone(player.transform);
         yield return new WaitForSeconds(failDelay);
