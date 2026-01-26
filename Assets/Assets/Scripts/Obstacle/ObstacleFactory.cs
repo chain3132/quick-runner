@@ -46,7 +46,7 @@ public class ObstacleFactory : MonoBehaviour
         var obstacle = obj.GetComponent<HitObstacle>();
         obstacle.Initialize(hitFeedBack);
         obj.transform.SetParent(laneParent);
-        obj.transform.localPosition += new Vector3(-0.1f, 0, 0);
+        //obj.transform.localPosition += new Vector3(-0.005f, 0, 0);
         return obj;
     }
     

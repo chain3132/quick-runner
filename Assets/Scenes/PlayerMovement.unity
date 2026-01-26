@@ -1604,15 +1604,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleFactory
   blockPrefab: {fileID: 6577626714266147315, guid: 2ef8c977924a49b419f89633c7db3ad2, type: 3}
-  lowBlockPrefab: {fileID: 5030744789119403709, guid: 2e9d85a4c07f9dd4f9a53c90107c9c3e, type: 3}
+  lowBlockPrefab: {fileID: 4120425395910314919, guid: 4b961dc496fa2ce4f9c8e62b6c6a0507, type: 3}
   breakWallPrefab: {fileID: 100064, guid: 952f886e9059daf49b863e4e7344fa41, type: 3}
   longGapPrefab: {fileID: 0}
   tunnelPrefab: {fileID: 3291081936214839135, guid: 93518f5d1d6eab1448d4a9b83b0afd7a, type: 3}
   difficulty: {fileID: 784584413}
-  offsetY: 0.5
+  offsetY: 1
   offsetYBreakWall: 4
   chunkLength: 12.5
-  offsetYLowBlock: 0.5
+  offsetYLowBlock: 1.5
   offsetYTunnelWall: 0.5
   hitFeedBack: {fileID: 1222912655}
 --- !u!4 &981145844
@@ -2507,7 +2507,7 @@ MonoBehaviour:
   targetX: 0
   isPlayerDie: 0
   afterImage: {fileID: 1610735025}
-  jumpForce: 8
+  jumpForce: 9
   gravity: -20
   slideDuration: 0.5
   trackHeight: 0.5
@@ -3192,7 +3192,7 @@ MonoBehaviour:
   targetX: 0
   isPlayerDie: 0
   afterImage: {fileID: 1885757271}
-  jumpForce: 8
+  jumpForce: 9
   gravity: -20
   slideDuration: 0.5
   trackHeight: 0.5
