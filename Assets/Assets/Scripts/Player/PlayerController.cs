@@ -28,6 +28,14 @@ public class PlayerController : MonoBehaviour
     public float fastFallSpeed = -35f;
     private bool isFastFalling;
     public bool failLongJump = false;
+
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -123,9 +131,9 @@ public class PlayerController : MonoBehaviour
         }
         if (IsGrounded() )
         {
-            Vector3 v = rb.velocity;
+            Vector3 v = rb.linearVelocity;
             v.y = 0f;
-            rb.velocity = v;
+            rb.linearVelocity = v;
         }
         rb.MovePosition(pos);
     }
@@ -165,6 +173,7 @@ public class PlayerController : MonoBehaviour
 
             verticalVelocity = jumpForce;
             animator.SetTrigger("Jump");
+            audioManager.PlaySFX(audioManager.jumpSFX);
         }
     }
 
@@ -176,6 +185,7 @@ public class PlayerController : MonoBehaviour
             slideTimer = slideDuration;
             ShrinkCollider();
             animator.SetTrigger("Slide");
+            audioManager.PlaySFX(audioManager.slideSFX);
         }
     }
 
@@ -212,7 +222,7 @@ public class PlayerController : MonoBehaviour
         pos.y = trackHeight;
         transform.position = pos;
 
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation
                          | RigidbodyConstraints.FreezePositionY
