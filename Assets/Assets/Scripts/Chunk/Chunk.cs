@@ -19,11 +19,15 @@
         public ObstacleFactory factory;
         public DifficultyController difficulty;
         public bool isFirstChunk;
+        private bool isSetSafe = false;
         
         bool isSpecial = false;
         SpecialType specialType;
-        
-        
+
+        public void SetSafe()
+        {
+            isSetSafe = true;
+        }
 
         public void SetSpecial(SpecialType t)
         {
@@ -46,7 +50,7 @@
         void Start()
         {
             if (isFirstChunk) return;
-
+            if (isSetSafe) return;
             if (isSpecial)
                 GenerateSpecialPattern();
             else

@@ -5,10 +5,11 @@ public class PlayerController : MonoBehaviour
     public float lerpSpeed = 10f;
     public float targetX;
     public bool isPlayerDie = false;
-    
+    public AfterImageSpawner afterImage;
+
     public float jumpForce = 7f;
     public float gravity = -20f;
-    public float slideDuration = 0.5f;
+    public float slideDuration = 0.4f;
     public float trackHeight = 0f;
     
     private float verticalVelocity;
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [Header("Fast Fall")]
     public float fastFallSpeed = -35f;
     private bool isFastFalling;
-
+    public bool failLongJump = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,14 +48,25 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        
         if (GameManager.Instance.isGameOver)
         {
             if (!this.isPlayerDie)
             {
-                Debug.Log("PlayerController: Pray animation");
                 animator.SetTrigger("Pray");
             }
             return;
+        }
+        float dx = Mathf.Abs(transform.position.x - targetX);
+
+        if (dx < 0.5f)
+        {
+            afterImage.StopAfterImage();
+        }
+        if (failLongJump)
+        {
+            verticalVelocity = fastFallSpeed ;
+            
         }
         Vector3 pos = rb.position;;
         if (forceCentering)
@@ -79,13 +91,17 @@ public class PlayerController : MonoBehaviour
         pos.y += verticalVelocity * Time.deltaTime;
     
         // Ground
-        if (pos.y <= trackHeight && !isPlayerDie )
+        if (pos.y <= trackHeight && !isPlayerDie && !failLongJump )
         {
             pos.y = trackHeight;
             verticalVelocity = 0f;
             isFastFalling = false;
-            rb.constraints = RigidbodyConstraints.FreezeRotation
-                             | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+            if (CharacterManager.Instance.state == SyncJumpState.None)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotation
+                                 | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+            }
+            
         }
         
         // Slide timer
@@ -98,19 +114,14 @@ public class PlayerController : MonoBehaviour
                 RestoreCollider();
             }
         }
-
+    
         transform.position = pos;
         if (longJumping)
         {
             verticalVelocity += Mathf.Abs( 2f * Time.deltaTime);
-
-            if (IsGrounded())
-            {
-                longJumping = false;
-                CharacterManager.Instance.OnLongJumpLanded();
-            }
+            
         }
-        if (IsGrounded())
+        if (IsGrounded() )
         {
             Vector3 v = rb.velocity;
             v.y = 0f;
@@ -118,6 +129,7 @@ public class PlayerController : MonoBehaviour
         }
         rb.MovePosition(pos);
     }
+   
     public void MoveToX(float x)
     {
         targetX = x;
@@ -134,9 +146,16 @@ public class PlayerController : MonoBehaviour
     public void ExecuteLongJump()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        verticalVelocity = jumpForce * 1.9f; 
 
-        verticalVelocity = jumpForce * 1.8f; 
         longJumping = true;
+        
+    }
+
+    
+    public void EndLongJump()
+    {
+        longJumping = false;
     }
     public void Jump()
     {
@@ -163,6 +182,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         return Mathf.Abs(transform.position.y - trackHeight) < 0.02f;
+        
     }
 
     void ShrinkCollider()
@@ -182,7 +202,22 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetTrigger("Dead");
     }
-    
+    public void ResetAfterLongJump()
+    {
+        verticalVelocity = 0f;
+        longJumping = false;
+        isFastFalling = false;
+
+        Vector3 pos = transform.position;
+        pos.y = trackHeight;
+        transform.position = pos;
+
+        rb.velocity = Vector3.zero;
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation
+                         | RigidbodyConstraints.FreezePositionY
+                         | RigidbodyConstraints.FreezePositionZ;
+    }
 
     
 }

@@ -18,14 +18,23 @@ public class ChunkSpawner : MonoBehaviour
     private bool previousWasLongGap = false;
     private int longGapRemaining = 0;
     private bool lastWasSpecial = false;
-    private float currentSpeed;
+    private float currentSpeed = 13;
+    private bool forceNextChunkSafe = false;
     
     [SerializeField] bool testMode = false;
     [SerializeField] SpecialType testSpecialType = SpecialType.ShrinkTunnel;
+    enum LongGapState
+    {
+        None,
+        SpawnSafe,
+        SpawnGap,
+        SpawnRecovery
+    }
 
+    LongGapState longGapState = LongGapState.None;
     void Start()
     {
-        currentSpeed = DistanceManager.Instance.speed;
+        currentSpeed = 13;
         // spawn chunk แรกที่ตำแหน่ง origin
         SpawnFirstChunk();
         
@@ -78,55 +87,77 @@ public class ChunkSpawner : MonoBehaviour
 
     void SpawnNextChunk()
     {
-            chunkCount++;
+        chunkCount++;
 
-            if (previousWasLongGap)
+        // ===== LongGap flow =====
+        if (longGapState != LongGapState.None)
+        {
+            HandleLongGapFlow();
+            return;
+        }
+
+        bool spawnSpecial =
+            !lastWasSpecial &&
+            chunkCount > 3 &&
+            difficulty.ShouldSpawnSpecial();
+
+        if (spawnSpecial)
+        {
+            var special = RollSpecialTypeBalanced();
+
+            if (special == SpecialType.LongGap)
             {
-                previousWasLongGap = false;
-                SpawnNormalChunk();
-                lastWasSpecial = false;
-                return;
-            }
-
-            bool spawnSpecial = false;
-
-            if (!lastWasSpecial && chunkCount > 3 && difficulty.ShouldSpawnSpecial())
-            {
-                spawnSpecial = true;
-                Debug.Log("Spawning Special Chunk");
-            }
-                
-
-            SpecialType? special = null;
-
-            if (spawnSpecial)
-                special = RollSpecialTypeBalanced();
-
-            // ถ้า roll ได้ LongGap
-            if (special == SpecialType.LongGap && !previousWasLongGap)
-            {
-                previousWasLongGap = true;
-                lastWasSpecial = true; 
-                SpawnLongGapChunk();
-                
-                return;
-            }
-
-            // ถ้าเป็น special อื่น
-            previousWasLongGap = false;
-            if (special != null)
-            {
-                SpawnSpecialChunk(special.Value);
+                longGapState = LongGapState.SpawnSafe;
                 lastWasSpecial = true;
+                HandleLongGapFlow();
+                return;
             }
-            else
-            {
-                SpawnNormalChunk();
-                lastWasSpecial = false;
-            }
+
+            SpawnSpecialChunk(special);
+            lastWasSpecial = true;
+            return;
+        }
+
+        SpawnNormalChunk();
+        lastWasSpecial = false;
                 
             
+    }
+    void HandleLongGapFlow()
+    {
+        switch (longGapState)
+        {
+            case LongGapState.SpawnSafe:
+                SpawnSafeChunk();
+                longGapState = LongGapState.SpawnGap;
+                break;
+
+            case LongGapState.SpawnGap:
+                SpawnLongGapChunk();
+                longGapState = LongGapState.SpawnRecovery;
+                break;
+
+            case LongGapState.SpawnRecovery:
+                SpawnNormalChunk();
+                longGapState = LongGapState.None;
+                lastWasSpecial = false;
+                break;
         }
+    }
+    void SpawnSafeChunk()
+    {
+        var prefab = chunkPrefabs[0];
+        var obj = Instantiate(prefab, lastExit.position, Quaternion.identity);
+        obj.transform.position = new Vector3(obj.transform.position.x, -4.75f, obj.transform.position.z);
+
+        var c = obj.GetComponent<Chunk>();
+        c.factory = factory;
+        c.difficulty = difficulty;
+        c.SetSafe(); // <<< ต้องเพิ่มใน Chunk
+
+        active.Enqueue(obj);
+        lastExit = obj.transform.Find("ExitPoint");
+    }
     void SpawnLongGapChunk()
     {
         var obj = Instantiate(longGapPrefab, lastExit.position, Quaternion.identity);
@@ -182,7 +213,7 @@ public class ChunkSpawner : MonoBehaviour
        
         foreach (var chunk in active)
         {
-            chunk.transform.position += Vector3.back * DistanceManager.Instance.speed * Time.deltaTime;
+            chunk.transform.position += Vector3.back * currentSpeed * Time.deltaTime;
         }
     }
 

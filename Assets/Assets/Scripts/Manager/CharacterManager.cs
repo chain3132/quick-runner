@@ -66,6 +66,7 @@ public class CharacterManager : MonoBehaviour
     
     private void Update()
     {
+
         if (GameManager.Instance.isGameOver)
         {
             return;
@@ -73,8 +74,8 @@ public class CharacterManager : MonoBehaviour
         Vector2 m1 = input.P1Move;
         Vector2 m2 = input.P2Move;
 
-        HandleLaneInput(ref laneP1, ref laneInputLockP1, m1.x);
-        HandleLaneInput(ref laneP2, ref laneInputLockP2, m2.x);
+        HandleLaneInput(ref laneP1, ref laneInputLockP1, m1.x, p1);
+        HandleLaneInput(ref laneP2, ref laneInputLockP2, m2.x, p2);
         
         HandleVerticalInput(p1, m1.y);
         HandleVerticalInput(p2, m2.y);
@@ -118,10 +119,11 @@ public class CharacterManager : MonoBehaviour
           
     }
     
-    void HandleLaneInput(ref int lane, ref bool locked, float x)
+    void HandleLaneInput(ref int lane, ref bool locked, float x,PlayerController player)
     {
         if (!locked)
         {
+            int oldLane = lane;
             if (x > 0.5f)
             {
                 lane = Mathf.Clamp(lane + 1, 0, laneX.Length - 1); locked = true;
@@ -133,7 +135,13 @@ public class CharacterManager : MonoBehaviour
                 lane = Mathf.Clamp(lane - 1, 0, laneX.Length - 1); locked = true;
 
             }
+            
+            if (lane != oldLane)
+            {
+                player.afterImage.StartAfterImage();
+            }
         }
+        
         else
         {
             if (Mathf.Abs(x) < 0.1f) locked = false;
@@ -176,24 +184,13 @@ public class CharacterManager : MonoBehaviour
     {
         state = SyncJumpState.WaitingBothPlayers;
 
-        if (!p1Inside && IsPlayerInside(p1)) p1Inside = true;
-        if (!p2Inside && IsPlayerInside(p2)) p2Inside = true;
+        if (!p1Inside ) p1Inside = true;
+        if (!p2Inside ) p2Inside = true;
     }
 
-    public void OnExitLongGapZone()
-    {
-        if (state != SyncJumpState.ExecutingLongJump)
-        {
-            Debug.Log("Exited Long Gap Zone too early");
-            GameManager.Instance.Fail();
-        }
-            
-    }
     
-    bool IsPlayerInside(PlayerController p)
-    {
-        return Vector3.Distance(p.GetComponent<Rigidbody>().position, LongGapTrigger.Current.transform.position) < 30f;
-    }
+    
+    
 
     void TickSyncJump()
     {
@@ -213,7 +210,6 @@ public class CharacterManager : MonoBehaviour
 
             case SyncJumpState.WaitingJumpInput:
                 jumpTimer -= Time.deltaTime;
-                Debug.Log($"Waiting for both players to jump. Time left: {jumpTimer}");
                 if (p1Jumped && p2Jumped)
                 {
                     Debug.Log("Both players jumped!");
@@ -222,11 +218,11 @@ public class CharacterManager : MonoBehaviour
                     break;
                 }
 
-                if (jumpTimer <= 0f)
-                {
-                    Debug.Log("Failed to jump in time");
-                    GameManager.Instance.Fail();
-                }
+                // if (jumpTimer <= 0f)
+                // {
+                //     Debug.Log("Failed to jump in time");
+                //     GameManager.Instance.Fail();
+                // }
                 break;
 
             case SyncJumpState.ExecutingLongJump:
@@ -270,23 +266,8 @@ public class CharacterManager : MonoBehaviour
                 break;
         }
     }
-    bool IsBothPlayersCentered()
-    {
-        float centerX = laneX[laneP1];
-        const float threshold = 0.05f;
-
-        bool p1Ok = Mathf.Abs(p1.transform.position.x - centerX) < threshold;
-        bool p2Ok = Mathf.Abs(p2.transform.position.x - centerX) < threshold;
-
-        return p1Ok && p2Ok;
-    }
-    void StartMovePlayersToCenter()
-    {
-        float centerX = laneX[laneP1]; // lane เดียวกันแล้ว
-        Debug.Log("Moving both players to center at X = " + centerX);
-        p1.MoveToX(centerX);
-        p2.MoveToX(centerX);
-    }
+    
+    
     void ExecuteLongJump()
     {
         Debug.Log("Both players jumped the long gap!");
@@ -313,6 +294,7 @@ public class CharacterManager : MonoBehaviour
     public void OnLongJumpLanded()
     {
         state = SyncJumpState.None;
+        ResetFlags();
     }
     public void OnSlideExecuted()
     {

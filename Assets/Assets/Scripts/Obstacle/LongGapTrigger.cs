@@ -17,12 +17,15 @@ public class LongGapTrigger : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         
-        var playerController = other.gameObject.GetComponent<PlayerController>();
         var playerRigidbody = other.gameObject.GetComponent<Rigidbody>();
-        
-        playerController.isPlayerDie = true;
+        var player = other.gameObject.GetComponent<PlayerController>();
         playerRigidbody.useGravity = true;
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
         //CharacterManager.Instance.OnExitLongGapZone();
+        if (CharacterManager.Instance.state != SyncJumpState.ExecutingLongJump)
+        {
+            player.failLongJump = true;
+        }
     }
     
     

@@ -2,8 +2,18 @@ using UnityEngine;
 
 public class ExitLongGap : MonoBehaviour
 {
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        CharacterManager.Instance.OnExitLongGapZone();
+        
+        var player = other.gameObject.GetComponent<PlayerController>();
+        var playerRigidbody = other.gameObject.GetComponent<Rigidbody>();
+        player.EndLongJump();
+        player.failLongJump = false;
+        player.ResetAfterLongJump();
+        CharacterManager.Instance.OnLongJumpLanded();
+        
+
+        playerRigidbody.useGravity = false;
+
     }
 }
