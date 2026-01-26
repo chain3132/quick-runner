@@ -75,6 +75,7 @@ namespace EasyDestuctibleWall {
             }
 
             // *** case ผ่านเงื่อนไข lane → ให้แตกตามระบบเดิม ***
+            AudioManager.instance.PlaySFX(AudioManager.instance.breakWallSFX);
             hitFeedback.PlayFeedbacks();
             TimeController.Instance.PlaySlow(0.2f, 1f);
             if (collision.rigidbody)

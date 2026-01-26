@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
     [Header("- - - Audio Source - - -")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource SFXSource;
@@ -10,6 +12,23 @@ public class AudioManager : MonoBehaviour
     public AudioClip backgroundMusic;
     public AudioClip jumpSFX;
     public AudioClip slideSFX;
+    public AudioClip swichtLaneSFX;
+    public AudioClip dieSFX;
+    public AudioClip afterJumpSFX;
+    public AudioClip breakWallSFX;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {

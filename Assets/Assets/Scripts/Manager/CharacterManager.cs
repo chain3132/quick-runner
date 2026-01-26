@@ -51,12 +51,16 @@ public class CharacterManager : MonoBehaviour
     private bool p2Slided;
     float jumpTimer = 2f;
     
+    AudioManager audioManager;
+
     
     
     
     private void Awake()
     {
         Instance = this;
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
     }
     private void Start()
     {
@@ -139,6 +143,7 @@ public class CharacterManager : MonoBehaviour
             if (lane != oldLane)
             {
                 player.afterImage.StartAfterImage();
+                audioManager.PlaySFX(audioManager.swichtLaneSFX);
             }
         }
         

@@ -10,13 +10,18 @@ public class GameManager : MonoBehaviour
     public bool isGameOver = false;
     [SerializeField] public PlayerController player1;
     [SerializeField] private PlayerController player2;
+    AudioManager audioManager;
+
+    
     private void Awake()
     {
         Instance = this;
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         
     }
     public void Fail()
     {
+        audioManager.PlaySFX(audioManager.dieSFX);
         Time.timeScale = 0f;
         failUI.SetActive(true);
     }

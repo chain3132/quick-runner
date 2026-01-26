@@ -6,10 +6,12 @@ public class ObstacleFactory : MonoBehaviour
     public GameObject blockPrefab;
     public GameObject lowBlockPrefab;
     public GameObject breakWallPrefab;
+    public GameObject forcedDodgePrefab;
     public GameObject longGapPrefab;
     public GameObject tunnelPrefab;
     public DifficultyController difficulty;
     public float offsetY = 2;
+    public float offsetYJumpBlock = 1.5f;
     public int offsetYBreakWall = 2;
     public float chunkLength = 25f;
     public float offsetYLowBlock =2;
@@ -21,9 +23,9 @@ public class ObstacleFactory : MonoBehaviour
         Vector3 pos = laneParent.position + new Vector3(0, offsetY, z);
         GameObject obj = Instantiate(blockPrefab, pos, blockPrefab.transform.rotation);
         var obstacle = obj.GetComponent<HitObstacle>();
-
         obstacle.Initialize(hitFeedBack);
         obj.transform.SetParent(laneParent);
+        obj.transform.localPosition += new Vector3(-0.05f, 0, 0);
         return obj;
     }
     
@@ -37,7 +39,21 @@ public class ObstacleFactory : MonoBehaviour
             case ObstacleType.Slide:
                 SpawnLowBlockAt(laneParent, z);
                 break;
+            case ObstacleType.ForcedDodge:
+                SpawnForcedDodgeAt(laneParent, z);
+                break;
         }
+    }
+    public GameObject SpawnForcedDodgeAt(Transform laneParent, float z)
+    {
+        Vector3 pos = laneParent.position + new Vector3(0, offsetYJumpBlock, z);
+        GameObject obj = Instantiate(forcedDodgePrefab, pos, Quaternion.identity);
+        var obstacle = obj.GetComponent<HitObstacle>();
+
+        obstacle.Initialize(hitFeedBack);
+
+        obj.transform.SetParent(laneParent);
+        return obj;
     }
     public GameObject SpawnLowBlockAt(Transform laneParent, float z)
     {

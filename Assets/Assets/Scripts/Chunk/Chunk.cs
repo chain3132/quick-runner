@@ -5,7 +5,8 @@
     public enum ObstacleType
     {
         Jump,
-        Slide
+        Slide,
+        ForcedDodge
     }
     public enum SpecialType
     {
@@ -28,7 +29,10 @@
         {
             isSetSafe = true;
         }
-
+        public bool IsForcedDodge(ObstacleType type)
+        {
+            return type == ObstacleType.ForcedDodge;
+        }
         public void SetSpecial(SpecialType t)
         {
             isSpecial = true;
@@ -43,8 +47,9 @@
         public ObstacleType RollObstacleType()
         {
             float r = Random.value;
-            if (r < 0.7f) return ObstacleType.Jump;
-            else return ObstacleType.Slide;
+            if (r < 0.6f) return ObstacleType.Jump;
+            if (r < 0.85f) return ObstacleType.Slide;
+            return ObstacleType.ForcedDodge;
         }
 
         void Start()
@@ -100,44 +105,53 @@
         }
         void SpawnSlot(float z)
         {
+            ObstacleType type = RollObstacleType();
+
+            if (IsForcedDodge(type))
+            {
+                SpawnForcedDodgePattern(type, z);
+                return;
+            }
+
             float r = Random.value;
 
             if (r < 0.7f)
-            {
-                SpawnSingleLane(z);
-            }
+                SpawnSingleLane(z, type);
             else if (r < 0.9f)
-            {
-                SpawnTwoLanes(z);
-            }
+                SpawnTwoLanes(z, type);
             else
+                SpawnAllLanes(z, type);
+        }
+        void SpawnForcedDodgePattern(ObstacleType type, float z)
+        {
+            int safeLane = Random.Range(0, 3);
+
+            for (int lane = 0; lane < 3; lane++)
             {
-                SpawnAllLanes(z);
+                if (lane == safeLane) continue;
+                factory.SpawnTypeAt(type, lanePoints[lane], z);
             }
         }
-        void SpawnSingleLane(float z)
+        void SpawnSingleLane(float z, ObstacleType type)
         {
             int lane = Random.Range(0, 3);
-            var type = RollObstacleType();
             factory.SpawnTypeAt(type, lanePoints[lane], z);
         }
 
-        void SpawnTwoLanes(float z)
+        void SpawnTwoLanes(float z, ObstacleType type)
         {
             int a = Random.Range(0, 3);
             int b;
             do { b = Random.Range(0, 3); } while (b == a);
 
-            factory.SpawnTypeAt(RollObstacleType(), lanePoints[a], z);
-            factory.SpawnTypeAt(RollObstacleType(), lanePoints[b], z);
+            factory.SpawnTypeAt(type, lanePoints[a], z);
+            factory.SpawnTypeAt(type, lanePoints[b], z);
         }
 
-        void SpawnAllLanes(float z)
+        void SpawnAllLanes(float z, ObstacleType type)
         {
             for (int lane = 0; lane < 3; lane++)
-            {
-                factory.SpawnTypeAt(RollObstacleType(), lanePoints[lane], z);
-            }
+                factory.SpawnTypeAt(type, lanePoints[lane], z);
         }
         
         void GenerateSpecialPattern()
