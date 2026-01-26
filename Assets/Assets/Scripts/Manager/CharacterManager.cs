@@ -178,6 +178,8 @@ public class CharacterManager : MonoBehaviour
 
         if (!p1Inside ) p1Inside = true;
         if (!p2Inside ) p2Inside = true;
+        p1Slided = false;
+        p2Slided = false;
     }
     
     public void OnEnterLongGapZone()

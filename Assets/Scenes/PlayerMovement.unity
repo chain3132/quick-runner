@@ -1271,7 +1271,7 @@ MonoBehaviour:
   factory: {fileID: 981145843}
   difficulty: {fileID: 784584413}
   testMode: 0
-  testSpecialType: 1
+  testSpecialType: 0
 --- !u!4 &761715708
 Transform:
   m_ObjectHideFlags: 0
@@ -3454,6 +3454,8 @@ MonoBehaviour:
   drone: {fileID: 1194739068697054502, guid: cf9e62c1d870c0744931b12d2e4c1341, type: 3}
   parent: {fileID: 2009455926}
   isGameOver: 0
+  player1: {fileID: 1235788167}
+  player2: {fileID: 1329993658}
 --- !u!4 &1659143862
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public GameObject drone;
     public Transform parent;
     public bool isGameOver = false;
+    [SerializeField] public PlayerController player1;
+    [SerializeField] private PlayerController player2;
     private void Awake()
     {
         Instance = this;
@@ -27,10 +29,23 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         
     }
-    public void SpawnDrone(Transform target)
+    public void SpawnDrone(Transform target,bool parented = true)
     {
-        Instantiate(drone,parent);
+        if (parented)
+        {
+            Instantiate(drone,parent);
+        }
+        else
+        {
+            Instantiate(drone);
+        }
+        
         parent.localPosition = new Vector3(target.position.x, 0, target.position.z);
     }
-    
+
+    public void CheckPlayerDied()
+    {
+        player1.PlayPrayAnimation();
+        player2.PlayPrayAnimation();
+    }
 }

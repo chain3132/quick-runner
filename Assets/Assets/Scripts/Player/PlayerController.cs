@@ -51,10 +51,7 @@ public class PlayerController : MonoBehaviour
         
         if (GameManager.Instance.isGameOver)
         {
-            if (!this.isPlayerDie)
-            {
-                animator.SetTrigger("Pray");
-            }
+            
             return;
         }
         float dx = Mathf.Abs(transform.position.x - targetX);
@@ -161,13 +158,19 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded() && !isSliding)
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.constraints = RigidbodyConstraints.FreezeRotation| RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;;
 
             verticalVelocity = jumpForce;
             animator.SetTrigger("Jump");
         }
     }
-
+    public void PlayPrayAnimation()
+    {
+        if (!this.isPlayerDie)
+        {
+            animator.SetTrigger("Pray");
+        }
+    }
     public void Slide()
     {
         if (IsGrounded() && !isSliding)

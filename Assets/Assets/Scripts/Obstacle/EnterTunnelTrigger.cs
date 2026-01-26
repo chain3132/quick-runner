@@ -14,7 +14,7 @@ public class EnterTunnelTrigger : MonoBehaviour
         Debug.Log("Enter Slide Zone");
         CharacterManager.Instance.OnEnterSlideZone();
         
-    }
+    }   
     
 
     private void OnTriggerExit(Collider other)

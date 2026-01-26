@@ -1,3 +1,4 @@
+using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 
@@ -64,19 +65,19 @@ public class CameraController : MonoBehaviour
             if (transform.position == targetForwardPosition)
             {
                 reachedForward = true;
-                GameOver();
+                StartCoroutine(GameOver());
             }
         }
     }
     
-    void GameOver()
+    private IEnumerator GameOver()
     {
-        GameManager.Instance.SpawnDrone(transform);
-        //GameManager.Instance.Fail();
+        GameManager.Instance.isGameOver = true;
+        GameManager.Instance.SpawnDrone(GameManager.Instance.player1.transform,true);
+        GameManager.Instance.CheckPlayerDied();
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.Fail();
     }
     
-    public void ShakeCamera()
-    {
-        cameraShake.PlayFeedbacks();
-    }
+    
 }

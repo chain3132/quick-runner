@@ -24,6 +24,9 @@ public class HitObstacle : MonoBehaviour
             GameManager.Instance.isGameOver = true;
             var player = other.collider.GetComponent<PlayerController>();
             player.isPlayerDie = true;
+            GameManager.Instance.CheckPlayerDied();
+            
+            
             player.Dead();
             StartCoroutine(HitSequence(player));
         }
