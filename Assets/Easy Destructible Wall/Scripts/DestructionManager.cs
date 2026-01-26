@@ -88,7 +88,7 @@ namespace EasyDestuctibleWall {
         {
             
             hitFeedback.PlayFeedbacks();
-            GameManager.Instance.SpawnDrone(player.transform);
+            //GameManager.Instance.SpawnDrone(player.transform);
             yield return new WaitForSeconds(failDelay);
             GameManager.Instance.Fail();
         }
