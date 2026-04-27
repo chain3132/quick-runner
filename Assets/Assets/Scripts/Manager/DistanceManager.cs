@@ -8,6 +8,7 @@ public class DistanceManager : MonoBehaviour
     
     public float distance;
     public float speed = 13f;
+    public float time = 0;
     public TextMeshProUGUI distanceText;
 
     void Awake()
@@ -28,6 +29,7 @@ public class DistanceManager : MonoBehaviour
             return;
         }
         distance += speed * Time.deltaTime;
+        time += Time.deltaTime;
         distanceText.text = Mathf.FloorToInt(distance).ToString() + " m";
     }
     public void CheckDifficulty(int d)

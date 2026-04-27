@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitObstacle
   failDelay: 3
+  hitType: 1
 --- !u!64 &2968848869596598984
 MeshCollider:
   m_ObjectHideFlags: 0

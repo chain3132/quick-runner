@@ -2,11 +2,20 @@ using System;
 using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
-
+public enum HitType
+{
+    Sign,
+    Barrier,
+    Car,
+    LongGap,
+    Slide,
+    Wall
+}
 public class HitObstacle : MonoBehaviour
 {
     [SerializeField] private float failDelay = 1f;
     private MMF_Player _hitFeedBack;
+    [SerializeField] private HitType hitType;
     public void Initialize(MMF_Player hitFeedback)
     {
         _hitFeedBack = hitFeedback;
@@ -25,7 +34,7 @@ public class HitObstacle : MonoBehaviour
             var player = other.collider.GetComponent<PlayerController>();
             player.isPlayerDie = true;
             GameManager.Instance.CheckPlayerDied();
-            
+            //AnalyticsManager.instance.HitObstacle(hitType,(int)DistanceManager.Instance.distance,DistanceManager.Instance.time);
             
             player.Dead();
             StartCoroutine(HitSequence(player));
