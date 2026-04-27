@@ -1,0 +1,5 @@
+C:/Users/chain/Documents/GitHub/quick-runner/.utmp/RelWithDebInfo/1i2h5c5z/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/chain/Documents/GitHub/quick-runner/.utmp/RelWithDebInfo/1i2h5c5z/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/chain/Documents/GitHub/quick-runner/.utmp/RelWithDebInfo/1i2h5c5z/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/chain/Documents/GitHub/quick-runner/.utmp/RelWithDebInfo/1i2h5c5z/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/chain/Documents/GitHub/quick-runner/.utmp/RelWithDebInfo/1i2h5c5z/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
