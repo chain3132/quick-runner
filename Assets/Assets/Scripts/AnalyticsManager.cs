@@ -89,7 +89,7 @@ public class AnalyticsManager : MonoBehaviour
     
     public void OnClickExit()
     {
-        //StartCoroutine(ExitRoutine());
+        StartCoroutine(ExitRoutine());
     }
 
     IEnumerator ExitRoutine()

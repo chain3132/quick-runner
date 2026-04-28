@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         
@@ -25,12 +30,27 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         failUI.SetActive(true);
     }
+    public void ExitGame()
+    {
+        Time.timeScale = 1f;
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+    public void Revive()
+    {
+        DistanceManager.reviveDistance = DistanceManager.Instance.distance;
+        Restart();
+    }
     public void Restart()
     {
         if (Time.timeScale == 0)
         {
             Time.timeScale = 1f;
         }
+        Debug.Log("Restarting Game...");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         
     }

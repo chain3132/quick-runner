@@ -7,6 +7,7 @@ public class DistanceManager : MonoBehaviour
     public static DistanceManager Instance;
     
     public float distance;
+    public static float reviveDistance = 0f;    
     public float speed = 13f;
     public float time = 0;
     public TextMeshProUGUI distanceText;
@@ -20,6 +21,8 @@ public class DistanceManager : MonoBehaviour
         }
 
         Instance = this;
+        distance = reviveDistance;
+        reviveDistance = 0f;
     }
 
     void Update()

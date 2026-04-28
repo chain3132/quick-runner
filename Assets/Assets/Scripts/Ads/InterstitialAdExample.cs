@@ -26,11 +26,10 @@ public class InterstitialAdExample : MonoBehaviour, IUnityAdsLoadListener, IUnit
     // Show the loaded content in the Ad Unit:
     public void ShowAd()
     {
-        
         // Note that if the ad content wasn't previously loaded, this method will fail
         Debug.Log("Showing Ad: " + _adUnitId);
         Advertisement.Show(_adUnitId, this);
-        //AnalyticsManager.instance.Revive(true,true);
+        AnalyticsManager.instance.Revive(true,true);
     }
 
     // Implement Load Listener and Show Listener interface methods: 
@@ -53,5 +52,9 @@ public class InterstitialAdExample : MonoBehaviour, IUnityAdsLoadListener, IUnit
 
     public void OnUnityAdsShowStart(string _adUnitId) { }
     public void OnUnityAdsShowClick(string _adUnitId) { }
-    public void OnUnityAdsShowComplete(string _adUnitId, UnityAdsShowCompletionState showCompletionState) { }
+
+    public void OnUnityAdsShowComplete(string _adUnitId, UnityAdsShowCompletionState showCompletionState)
+    {
+        GameManager.Instance.Revive();
+    }
 }
